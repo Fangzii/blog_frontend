@@ -1,7 +1,8 @@
 import { axios } from '@/utils/request'
 
 const api = {
-  user: '/user',
+  entries: '/v1/entries/',
+  user: '/v1/users/',
   role: '/role',
   service: '/service',
   permission: '/permission',
@@ -12,6 +13,22 @@ const api = {
 export default api
 
 export function getUserList (parameter) {
+  return axios({
+    url: api.entries,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function getBlogDetail (id, parameter) {
+  return axios({
+    url: api.entries + id + '/',
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function getUserInformatization (parameter) {
   return axios({
     url: api.user,
     method: 'get',

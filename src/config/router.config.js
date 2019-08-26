@@ -9,7 +9,7 @@ export const asyncRouterMap = [
     name: 'index',
     component: BasicLayout,
     meta: { title: '首页' },
-    redirect: '/dashboard/workplace',
+    redirect: '/home',
     children: [
       // dashboard
       {
@@ -21,21 +21,15 @@ export const asyncRouterMap = [
         meta: { title: '仪表盘', keepAlive: true, icon: bxAnaalyse, permission: [ 'dashboard' ] },
         children: [
           {
-            path: '/dashboard/analysis',
-            name: 'Analysis',
-            component: () => import('@/views/dashboard/Analysis'),
-            meta: { title: '分析页', keepAlive: false, permission: [ 'dashboard' ] }
-          },
-          // 外部链接
-          {
-            path: 'https://www.baidu.com/',
-            name: 'Monitor',
-            meta: { title: '监控页（外部）', target: '_blank' }
-          },
-          {
-            path: '/dashboard/workplace',
+            path: '/home',
             name: 'Workplace',
-            component: () => import('@/views/dashboard/Workplace'),
+            component: () => import('@/views/blog/home'),
+            meta: { title: '工作台', keepAlive: true, permission: [ 'dashboard' ] }
+          },
+          {
+            path: '/detail/:id',
+            name: 'blogDetail',
+            component: () => import('@/views/blog/detail'),
             meta: { title: '工作台', keepAlive: true, permission: [ 'dashboard' ] }
           }
         ]

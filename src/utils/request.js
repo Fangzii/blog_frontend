@@ -20,8 +20,8 @@ const err = (error) => {
     const data = error.response.data
     const token = Vue.ls.get(ACCESS_TOKEN)
     if (error.response.status === 403) {
-      notification.error({
-        message: 'Forbidden',
+      notification.warn({
+        message: error.response.data.detail,
         description: data.message
       })
     }
@@ -32,9 +32,9 @@ const err = (error) => {
       })
       if (token) {
         store.dispatch('Logout').then(() => {
-          setTimeout(() => {
-            window.location.reload()
-          }, 1500)
+          // setTimeout(() => {
+          //   window.location.reload()
+          // }, 1500)
         })
       }
     }
@@ -46,7 +46,8 @@ const err = (error) => {
 service.interceptors.request.use(config => {
   const token = Vue.ls.get(ACCESS_TOKEN)
   if (token) {
-    config.headers['Access-Token'] = token // 让每个请求携带自定义 token 请根据实际情况自行修改
+    console.log(token, 999)
+    // config.headers['Access-Token'] = token // 让每个请求携带自定义 token 请根据实际情况自行修改
   }
   return config
 }, err)
