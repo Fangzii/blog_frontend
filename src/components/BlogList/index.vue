@@ -11,7 +11,7 @@
     <router-view></router-view>
     <a slot="extra">全部项目</a>
     <div :key="i" v-for="(item, i) in data">
-      <vdr v-show="item.show" class="window" :snap="true" :w="_w" :h="450" @resizing="onResize" class-name-handle="fang-handle-class">
+      <vdr v-show="item.show" class="window" :snap="true" :w="rw" :h="450" @resizing="onResize" class-name-handle="fang-handle-class">
         <div class="window-header">
           <a-row>
             <a-col :span="8">
@@ -72,7 +72,7 @@ export default {
       this._h = val
     },
     w(val) {
-      this._w = val
+      this.rw = val
     }
   },
   props: {
@@ -109,7 +109,7 @@ export default {
         { color: 'yellow', action: this.hiddenAction, icon: 'minus' },
         { color: 'green', action: this.magnifyAction, icon: 'arrows-alt' }
       ],
-      _w: 50,
+      rw: 50,
       _h: 50,
       showHeight: 400,
       showWidth: 50
@@ -118,7 +118,7 @@ export default {
   methods: {
     goDetail(item) {
       // 给默认长宽
-      this._w = this.$refs.card.$el.offsetWidth
+      this.rw = this.$refs.card.$el.offsetWidth
       // this._h = this.$refs.card.$el.offsetHeight
       this.showHeight = 430
       getBlogDetail(item.id).then(res => {
