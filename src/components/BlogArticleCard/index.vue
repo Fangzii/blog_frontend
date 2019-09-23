@@ -7,7 +7,6 @@
       <span slot="customRender" slot-scope="item">
         <a-icon type="home"/>{{item.key}}
       </span>
-      <a href="#" slot="extra">More</a>
       <div v-html="data[body]"></div>
     </a-card>
   </div>

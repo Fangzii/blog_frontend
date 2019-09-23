@@ -4,7 +4,8 @@
     width="256px"
     :collapsible="collapsible"
     v-model="collapsed"
-    :trigger="null">
+    :trigger="null"
+    >
     <logo :hidden="collapsed"/>
     <s-menu
       :collapsed="collapsed"
@@ -12,7 +13,7 @@
       :theme="theme"
       :mode="mode"
       @select="onSelect"
-      style="padding: 16px 0px;"></s-menu>
+      ></s-menu>
   </a-layout-sider>
 
 </template>
@@ -21,6 +22,7 @@
 import Logo from '@/components/tools/Logo'
 import SMenu from './index'
 import { mixin, mixinDevice } from '@/utils/mixin'
+import menu from './index';
 
 export default {
   name: 'SideMenu',
@@ -56,6 +58,10 @@ export default {
     onSelect (obj) {
       this.$emit('menuSelect', obj)
     }
-  }
+  },
+  // created() {
+  //   console.log(this.menus)
+  // }
 }
 </script>
+

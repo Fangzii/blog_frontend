@@ -2,7 +2,7 @@
 <template>
   <page-view :title="false">
     <div>
-      <blogArticleCard :data="data"></blogArticleCard>
+      <blogArticleCard :data="data" v-if="data"></blogArticleCard>
     </div>
 
   </page-view>
@@ -29,8 +29,10 @@ export default {
   created () {
     this.getDetail()
   },
-  mounted () {
-
+    watch: {
+    ['$route']: function (val) {
+      getDetail()  
+    }
   },
   methods: { 
     getDetail() {

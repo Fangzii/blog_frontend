@@ -11,34 +11,16 @@
     <router-view></router-view>
     <a slot="extra">全部项目</a>
     <div :key="i" v-for="(item, i) in data">
-      <vdr v-show="item.show" class="window" :snap="true" :w="rw" :h="450" @resizing="onResize" class-name-handle="fang-handle-class">
-        <div class="window-header">
-          <a-row>
-            <a-col :span="8">
-              <div class="window-action-button">
-                <a-row>
-                  <a-col :span="8" v-for="(items, i) in buttonArr" :key="i">
-                    <div :class="`window-button ${items.color}`" @click="items.action(item)">
-                      <!-- <a-icon :type="items.icon"/> -->
-                    </div>
-                  </a-col>
-                </a-row>
-              </div>
-            </a-col>
-            <a-col>
-              <span class="drag-handle">{{ item[title] }}</span>
-            </a-col>
-          </a-row>
+      <blog-window v-if="item.show" v-on:close="closeAction(item)" :loading="loading">
+        <span slot="title">{{ item[title] }}</span>
+        <div slot="content">
+          <div v-if="!loading && item.detailData" class="window-html">
+            <div v-html="item.detailData.body" :style="`height: ${showHeight - 20}px;overflow :auto;filter: invert(100%);`"></div>
+          </div>
         </div>
-        <div v-if="item.detailData" class="window-html">
-          <div v-html="item.detailData.body" :style="`height: ${showHeight - 20}px;overflow :auto;filter: invert(100%);`"></div>
-        </div>
-        <div v-else :style="`filter: invert(80%);padding: 10px;height: ${showHeight - 20}px;overflow :auto;`">
-            <a-skeleton :paragraph="{rows: 30}" active :title="false"/>
-        </div>
-      </vdr>
+      </blog-window>
       <a-card-grid class="project-card-grid">
-        <a-card :bordered="false" :body-style="{ padding: 0 }" @click="goDetail(item)">
+        <a-card :bordered="false" :body-style="{ padding: 0 }" @click="isMobile()? goMobileDetail(item) : goDetail(item)">
           <a-card-meta>
             <div slot="title" class="card-title">
               <a>{{ item[title] }}</a>
@@ -56,16 +38,19 @@
 </template>
 
 <script>
-import vdr from 'vue-draggable-resizable-gorkys'
-import 'vue-draggable-resizable-gorkys/dist/VueDraggableResizable.css'
+// import vdr from 'vue-draggable-resizable-gorkys'
+import blogWindow from '@/components/BlogWindow/index.vue'
+import { mixinDevice } from '@/utils/mixin.js'
+// import 'vue-draggable-resizable-gorkys/dist/VueDraggableResizable.css'
 import { getBlogDetail } from '@/api/manage'
-import blogDetail from '@/views/blog/detail.vue'
+// import blogDetail from '@/views/blog/detail.vue'
 export default {
   name: 'BlogList',
   components: {
-    vdr,
-    blogDetail
+    blogWindow
+    // blogDetail
   },
+  mixins: [mixinDevice],
   watch: {
     h(val) {
       // console.log(val, 999)
@@ -100,7 +85,7 @@ export default {
     },
     h: {
       default: 50
-    },
+    }
   },
   data() {
     return {
@@ -112,20 +97,22 @@ export default {
       rw: 50,
       _h: 50,
       showHeight: 400,
-      showWidth: 50
+      showWidth: 50,
+      loading: false,
     }
   },
   methods: {
     goDetail(item) {
+      this.loading = true;
       // 给默认长宽
       this.rw = this.$refs.card.$el.offsetWidth
       // this._h = this.$refs.card.$el.offsetHeight
       this.showHeight = 430
       getBlogDetail(item.id).then(res => {
-        
         item.detailData = res
+        this.loading = false;
         console.log(item.detailData)
-        this.$forceUpdate();
+        this.$forceUpdate()
       })
 
       item.show = !item.show
@@ -133,6 +120,14 @@ export default {
         name: 'Workplace',
         query: {
           window: item.id
+        }
+      })
+    },
+    goMobileDetail(item) {
+      this.$router.push({
+        name: 'blogDetail',
+        params: {
+          id: item.id
         }
       })
     },
@@ -295,7 +290,6 @@ export default {
   &-html {
     padding: 10px;
   }
-
 }
 
 .drag-handle {
@@ -303,6 +297,13 @@ export default {
   min-height: 35px;
   position: relative;
   bottom: 3px;
+}
+
+.fang-dragging-class {
+  opacity: 0.7;
+  cursor: move;
+  cursor: -webkit-grab;
+  cursor: grabbing;
 }
 
 .red {

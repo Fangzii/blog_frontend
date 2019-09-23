@@ -88,6 +88,7 @@ export default {
 
 .base_informatization {
   margin-top: 30px;
+  transition: all 300ms ease;
 }
 
 .icon {
