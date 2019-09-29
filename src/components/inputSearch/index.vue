@@ -7,7 +7,7 @@
       style="top: 10px"
     >
     <div slot="title">
-        <div>{{data}}</div>
+      <blogPrompter :inString="data" v-on:outString="outStringChange"></blogPrompter>
     </div>
       <div slot="content">
       </div>
@@ -18,10 +18,12 @@
 
 <script>
 import { mixin } from '@/utils/mixin'
+import blogPrompter from '@/components/BlogPrompter/index.vue'
 
 export default {
   name: 'inputSearch',
   components: {
+    blogPrompter
   },
   mixins: [mixin],
   data () {
@@ -36,6 +38,9 @@ export default {
   
   },
   methods: {
+    outStringChange(value) {
+      console.log(value, 8888999999)
+    },
     change(value) {
       this.visible = this.data ? true : false
     },
@@ -58,6 +63,11 @@ export default {
 
 .ant-popover-placement-bottomLeft > .ant-popover-content > .ant-popover-arrow {
   display: none;
+}
+
+.ant-input::-webkit-input-placeholder {
+  color: #3a3b3f !important;
+  font-size: 8px !important;
 }
 </style>
 

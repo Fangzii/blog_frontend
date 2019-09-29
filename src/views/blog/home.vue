@@ -3,44 +3,12 @@
   <page-view :avatar="avatar" :title="false">
     <div slot="headerContent">
       <div class="title">
-        {{ timeFix }}，{{ user.name }}
-        <span class="welcome-text">，{{ welcome() }}</span>
+        <!-- {{ timeFix }}，{{ user.name }}
+        <span class="welcome-text">，{{ welcome() }}</span> -->
       </div>
-      <div>前端工程师 | 蚂蚁金服 - 某某某事业群 - VUE平台</div>
-    </div>
-    <div slot="extra">
-      <a-row class="more-info">
-        <a-col :span="8">
-          <head-info title="项目数" content="56" :center="false" :bordered="false"/>
-        </a-col>
-        <a-col :span="8">
-          <head-info title="团队排名" content="8/24" :center="false" :bordered="false"/>
-        </a-col>
-        <a-col :span="8">
-          <head-info title="项目访问" content="2,223" :center="false"/>
-        </a-col>
-      </a-row>
     </div>
     <div>
-      <a-row :gutter="24">
-        <a-col :xl="16" :lg="24" :md="24" :sm="24" :xs="24">
-          <blogList :data="blogListData" :h="h" :w="w" ref="all"></blogList>
-        </a-col>
-        <a-col style="padding: 0 12px" :xl="8" :lg="24" :md="24" :sm="24" :xs="24">
-          <a-card :loading="loading" title="团队" :bordered="false">
-            <div class="members">
-              <a-row>
-                <a-col :span="12" v-for="(item, index) in teams" :key="index">
-                  <a>
-                    <a-avatar size="small" :src="item.avatar"/>
-                    <span class="member">{{ item.name }}</span>
-                  </a>
-                </a-col>
-              </a-row>
-            </div>
-          </a-card>
-        </a-col>
-      </a-row>
+      <blogList :data="blogListData" :h="h" :w="w" ref="all"></blogList>
     </div>
   </page-view>
 </template>
@@ -147,7 +115,9 @@ export default {
       }
       if (pass) {
         getBlogDetail(id).then(items => {
-          res.results.find(f => f.id == id).detailData = items
+          let use_data = res.results.find(f => f.id == id)
+          use_data.detailData = items
+          this.$store.getters.multiWindowTag['Tag'].push(use_data) // 如果打开则同步wintag
           // e.detailData = res
           this.$forceUpdate()
           this.w = this.$refs.all.$el.offsetWidth

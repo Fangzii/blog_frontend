@@ -1,11 +1,14 @@
 <template>
   <a-layout-sider
-    :class="['sider', isDesktop() ? null : 'shadow', theme, fixSiderbar ? 'ant-fixed-sidemenu' : null ]"
+    :class="['blog-menu','sider', isDesktop() ? null : 'shadow', theme, fixSiderbar ? 'ant-fixed-sidemenu' : null ]"
     width="256px"
+    height="300px"
     :collapsible="collapsible"
+    :collapsedWidth="60"
     v-model="collapsed"
     :trigger="null"
-    >
+    style="height: 30px"
+  >
     <logo :hidden="collapsed"/>
     <s-menu
       :collapsed="collapsed"
@@ -13,16 +16,24 @@
       :theme="theme"
       :mode="mode"
       @select="onSelect"
-      ></s-menu>
+      :style="`background: #202020;${collapsed? 'right: 10px;position: relative;' : ''}`"
+    ></s-menu>
+    <div class="menuBottomStyle">
+      <div
+        v-for="(item, index) in graph"
+        :key="index"
+        :class="`${item.class}`"
+        :style="`background: ${item.color};top: ${item.top}px;width: ${item.width}px;height: ${item.height}px;position: relative;border-radius: 50%;left: ${item.left}px`"
+      ></div>
+    </div>
   </a-layout-sider>
-
 </template>
 
 <script>
 import Logo from '@/components/tools/Logo'
 import SMenu from './index'
 import { mixin, mixinDevice } from '@/utils/mixin'
-import menu from './index';
+import menu from './index'
 
 export default {
   name: 'SideMenu',
@@ -54,14 +65,58 @@ export default {
       required: true
     }
   },
-  methods: {
-    onSelect (obj) {
-      this.$emit('menuSelect', obj)
+  data() {
+    return {
+      graph: [{ color: '#212121', top: '110', width: 35, height: 35, left: 7, class: 'oneStyle'},
+      { color: '#212121', top: '139', width: 20, height: 20, left: 6, class: 'twoStyle' }, 
+      { color: '#212121', top: '141', width: 30, height: 30, left: -3, class: 'threeStyle' }]
     }
   },
+  methods: {
+    onSelect(obj) {
+      this.$emit('menuSelect', obj)
+    }
+  }
   // created() {
   //   console.log(this.menus)
   // }
 }
 </script>
+<style lang="less" scoped>
+.blog-menu {
+  border-radius: 0px 0px 125px 0px;
+}
+
+.menuBottomStyle {
+  color: white;
+  position: absolute;
+  bottom: 0px;
+}
+
+.sider {
+  -webkit-box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
+  box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
+  position: relative;
+  z-index: 10;
+  min-height: 80vh;
+}
+
+.oneStyle:hover {
+  background: #f75558 !important;
+  transition: all .5s;
+  cursor: pointer;
+}
+
+.twoStyle:hover {
+  background: #fbbe33 !important;
+  transition: all 1s;
+  cursor: pointer;
+}
+
+.threeStyle:hover {
+  background: #3dcc44 !important;
+  transition: all .2s;
+  cursor: pointer;
+}
+</style>
 

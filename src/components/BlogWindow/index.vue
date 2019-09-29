@@ -86,7 +86,7 @@ export default {
       this.$emit('close', 'true')
     },
     hiddenAction() {
-      console.log('hiddenAction')
+      this.$emit('hidden', 'true')
     },
     magnifyAction() {
       console.log('magnifyAction')
@@ -103,7 +103,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .window {
-  border: 1px solid #e8e8e8;
+  border: 1px solid #3a3b3f;
   background: #1f1f1f;
   z-index: 999 !important;
   // width: 102% !important;

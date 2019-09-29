@@ -25,6 +25,7 @@ new Vue({
   store,
   created () {
     bootstrap()
+    store.dispatch('multiWindowTag')
   },
   render: h => h(App)
 }).$mount('#app')

@@ -26,6 +26,7 @@
       :theme="navTheme"
       :collapsed="collapsed"
       :collapsible="true"
+      style="background: #202020;"
     ></side-menu>
 
     <a-layout :class="[layoutMode, `content-width-${contentWidth}`]" :style="{ paddingLeft: contentPaddingLeft, minHeight: '100vh' }">
@@ -86,7 +87,7 @@ export default {
   data () {
     return {
       production: config.production,
-      collapsed: false,
+      collapsed: true,
       menus: []
     }
   },
@@ -112,7 +113,7 @@ export default {
   },
   created () {
     this.menus = this.mainMenu.find(item => item.path === '/').children
-    this.collapsed = !this.sidebarOpened
+    this.collapsed = true
   },
   mounted () {
     const userAgent = navigator.userAgent

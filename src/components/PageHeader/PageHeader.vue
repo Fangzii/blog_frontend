@@ -1,7 +1,6 @@
 <template>
   <div class="page-header">
     <div class="page-header-index-wide">
-      <!-- <s-breadcrumb /> -->
       <div class="detail">
         <div class="main" v-if="!$route.meta.hiddenHeaderContent">
           <div class="row">
@@ -61,8 +60,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
+
 .page-header {
-  background: #fff;
+  // background: #3a3b3f;
+  // background: #fff;
   padding: 16px 32px 0;
   border-bottom: 1px solid #e8e8e8;
 

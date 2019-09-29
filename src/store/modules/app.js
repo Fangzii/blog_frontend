@@ -9,7 +9,8 @@ import {
   DEFAULT_FIXED_SIDEMENU,
   DEFAULT_FIXED_HEADER_HIDDEN,
   DEFAULT_CONTENT_WIDTH_TYPE,
-  DEFAULT_MULTI_TAB
+  DEFAULT_MULTI_TAB,
+  MULTI_WINDOW_TAG
 } from '@/store/mutation-types'
 
 const app = {
@@ -24,7 +25,8 @@ const app = {
     autoHideHeader: false,
     color: null,
     weak: false,
-    multiTab: true
+    multiTab: true,
+    multiWindowTag: { Tag: [] }
   },
   mutations: {
     SET_SIDEBAR_TYPE: (state, type) => {
@@ -74,6 +76,10 @@ const app = {
     TOGGLE_MULTI_TAB: (state, bool) => {
       Vue.ls.set(DEFAULT_MULTI_TAB, bool)
       state.multiTab = bool
+    },
+    MULTI_WINDOW_TAG: (state, tag) => {
+      Vue.ls.set(MULTI_WINDOW_TAG, tag)
+      state.multiWindowTag = tag
     }
   },
   actions: {
@@ -115,6 +121,9 @@ const app = {
     },
     ToggleMultiTab ({ commit }, bool) {
       commit('TOGGLE_MULTI_TAB', bool)
+    },
+    multiWindowTag ({ commit }, tag) {
+      commit('MULTI_WINDOW_TAG', { Tag: [] })
     }
   }
 }

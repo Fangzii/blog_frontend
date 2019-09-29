@@ -1,15 +1,15 @@
 <template>
-  <div class="informatization" :style="`min-height: ${hidden? '0' : '200'}px;`">
+  <div class="informatization" :style="`min-height: ${hidden? '0' : '200'}px;${hidden? 'padding: 10px': 'padding: 20px'};`">
     <div class="base_informatization">
       <a-avatar :size="hidden? 38 : 52" icon="user" :src="logo" class="_logo"/>
-      <transition name="fade">
+      <!-- <transition name="fade"> -->
         <div v-show="!hidden">
           <div v-for="(item, index) in userInfoArr" :key="index">
             <a-icon :type="`${item.type}`" class="icon"/>
             <span>{{item.show}}</span>
           </div>
         </div>
-      </transition>
+      <!-- </transition> -->
     </div>
   </div>
 </template>
@@ -82,7 +82,9 @@ export default {
 </script>
 <style lang="less">
 .informatization {
-  color: #dad4d4 !important;
+  transition: all .1s;
+  // color: #dad4d4 !important;
+  filter: invert(100%);
   padding: 20px;
 }
 

@@ -4,14 +4,17 @@
       <a-layout-header
         v-if="visible"
         :class="[fixedHeader && 'ant-header-fixedHeader', sidebarOpened ? 'ant-header-side-opened' : 'ant-header-side-closed', ]"
-        :style="{ padding: '0' }">
-        <div v-if="mode === 'sidemenu'" class="header">
+        :style="{ padding: '0', background: 'red'}">
+        <div v-if="mode === 'sidemenu'" class="header" style="background: #3a3b3f;">
           <a-row>
-            <a-col :span="3">
-              <a-icon v-if="device==='mobile'" class="trigger" :type="collapsed ? 'menu-fold' : 'menu-unfold'" @click="toggle"/>
-              <a-icon v-else class="trigger" :type="collapsed ? 'menu-unfold' : 'menu-fold'" @click="toggle"/>
+            <a-col :span="1">
+              <a-icon v-if="device==='mobile'" class="trigger" :type="collapsed ? 'menu-fold' : 'menu-unfold'" @click="toggle" style="color: #3a3b3f;filter: invert(100%);"/>
+              <a-icon v-else class="trigger" :type="collapsed ? 'menu-unfold' : 'menu-fold'" @click="toggle" style="color: #3a3b3f;filter: invert(100%);"/>
             </a-col>
-            <a-col :span="21">
+            <a-col :span="17" style="line-height: 20px;top: 15px;">
+                <blogWinTag />
+            </a-col>
+            <a-col :span="6">
               <input-search style="float: right"></input-search> 
             </a-col>
           </a-row>
@@ -34,6 +37,7 @@
 </template>
 
 <script>
+import blogWinTag from '@/components/BlogWinTag/index.vue'
 import UserMenu from '../tools/UserMenu'
 import SMenu from '../Menu/'
 import Logo from '../tools/Logo'
@@ -46,7 +50,8 @@ export default {
     UserMenu,
     SMenu,
     Logo,
-    InputSearch
+    InputSearch,
+    blogWinTag
   },
   mixins: [mixin],
   props: {
@@ -118,6 +123,7 @@ export default {
 
 <style lang="less">
 .header-animat{
+
   position: relative;
   z-index: 2;
 }

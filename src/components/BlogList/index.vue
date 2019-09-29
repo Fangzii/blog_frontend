@@ -9,18 +9,25 @@
     ref="card"
   >
     <router-view></router-view>
-    <a slot="extra">全部项目</a>
+    <a slot="extra"></a>
     <div :key="i" v-for="(item, i) in data">
-      <blog-window v-if="item.show" v-on:close="closeAction(item)" :loading="loading">
+      <blog-window v-if="item.show" v-on:close="closeAction(item)" v-on:hidden="hiddenAction(item)" :loading="loading">
         <span slot="title">{{ item[title] }}</span>
         <div slot="content">
           <div v-if="!loading && item.detailData" class="window-html">
-            <div v-html="item.detailData.body" :style="`height: ${showHeight - 20}px;overflow :auto;filter: invert(100%);`"></div>
+            <div
+              v-html="item.detailData.body"
+              :style="`height: ${showHeight - 20}px;overflow :auto;filter: invert(100%);`"
+            ></div>
           </div>
         </div>
       </blog-window>
       <a-card-grid class="project-card-grid">
-        <a-card :bordered="false" :body-style="{ padding: 0 }" @click="isMobile()? goMobileDetail(item) : goDetail(item)">
+        <a-card
+          :bordered="false"
+          :body-style="{ padding: 0 }"
+          @click="isMobile()? goMobileDetail(item) : goDetail(item)"
+        >
           <a-card-meta>
             <div slot="title" class="card-title">
               <a>{{ item[title] }}</a>
@@ -43,13 +50,18 @@ import blogWindow from '@/components/BlogWindow/index.vue'
 import { mixinDevice } from '@/utils/mixin.js'
 // import 'vue-draggable-resizable-gorkys/dist/VueDraggableResizable.css'
 import { getBlogDetail } from '@/api/manage'
+import { mapGetters } from 'vuex'
 // import blogDetail from '@/views/blog/detail.vue'
 export default {
   name: 'BlogList',
   components: {
-    blogWindow
+    blogWindow,
     // blogDetail
   },
+  computed: mapGetters({
+      multiWindowTag: 'multiWindowTag'
+    })
+  ,
   mixins: [mixinDevice],
   watch: {
     h(val) {
@@ -58,6 +70,12 @@ export default {
     },
     w(val) {
       this.rw = val
+    },
+    'multiWindowTag.Tag': {
+      handler: function() {
+        console.log(9)
+      },
+      deep: true
     }
   },
   props: {
@@ -103,25 +121,27 @@ export default {
   },
   methods: {
     goDetail(item) {
-      this.loading = true;
-      // 给默认长宽
-      this.rw = this.$refs.card.$el.offsetWidth
-      // this._h = this.$refs.card.$el.offsetHeight
-      this.showHeight = 430
-      getBlogDetail(item.id).then(res => {
-        item.detailData = res
-        this.loading = false;
-        console.log(item.detailData)
-        this.$forceUpdate()
-      })
-
-      item.show = !item.show
-      this.$router.push({
-        name: 'Workplace',
-        query: {
-          window: item.id
-        }
-      })
+      if(!item.show) {
+        item.close = this.closeAction // 挂载关闭方法
+        this.multiWindowTag['Tag'].push(item)
+        this.loading = true
+        // 给默认长宽
+        this.rw = this.$refs.card.$el.offsetWidth
+        this.showHeight = 430
+        getBlogDetail(item.id).then(res => {
+          item.detailData = res
+          this.loading = false
+          this.$forceUpdate()
+        })
+  
+        item.show = true // 这个地方只负责打开窗口
+        this.$router.push({
+          name: 'Workplace',
+          query: {
+            window: item.id
+          }
+        })
+      }
     },
     goMobileDetail(item) {
       this.$router.push({
@@ -133,10 +153,19 @@ export default {
     },
     closeAction(item) {
       item.show = false
-      console.log('closeAction', item)
+      let index = this.multiWindowTag['Tag'].findIndex(f => item === f)
+      if(index > -1) {
+        this.multiWindowTag['Tag'].splice(index, 1) // 找到对应删除
+      }
+      
     },
     hiddenAction(item) {
-      console.log('hiddenAction')
+      item.show = false
+      let index = this.multiWindowTag['Tag'].findIndex(f => item === f)
+      if(index > -1) {
+        this.multiWindowTag['Tag'][index]['hidden'] = true
+      }
+      // console.log('hiddenAction')
     },
     magnifyAction(item) {
       console.log('magnifyAction')
@@ -144,6 +173,9 @@ export default {
     onResize(left, top, width, height) {
       this.showHeight = height
       this.showWidth = width
+    },
+    windowIdName(item) {
+      return `window_id_${item.id}`
     }
   }
 }
