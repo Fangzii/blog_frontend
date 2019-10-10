@@ -1,5 +1,5 @@
 <template>
-  <div id="userLayout" :class="['user-layout-wrapper', device]">
+  <!-- <div id="userLayout" :class="['user-layout-wrapper', device]">
     <div class="container">
       <div class="top">
         <div class="header">
@@ -26,7 +26,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script>

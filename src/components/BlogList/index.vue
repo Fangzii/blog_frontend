@@ -4,7 +4,7 @@
     :loading="false"
     style="margin-bottom: 24px;"
     :bordered="false"
-    title="进行中的项目"
+    title="博客文章"
     :body-style="{ padding: 0 }"
     ref="card"
   >
@@ -308,6 +308,7 @@ export default {
 
 .mobile {
   .project-list {
+    padding: 5px;
     .project-card-grid {
       width: 100%;
     }

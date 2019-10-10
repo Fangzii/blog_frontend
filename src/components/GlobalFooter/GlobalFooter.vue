@@ -1,5 +1,5 @@
 <template>
-  <div class="footer">
+  <!-- <div class="footer">
     <div class="links">
       <a
         href="https://pro.loacg.com/"
@@ -18,7 +18,7 @@
       Copyright
       <a-icon type="copyright" /> 2018 <span>白鹭学园技术组出品</span>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script>
