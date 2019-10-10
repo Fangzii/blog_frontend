@@ -108,25 +108,10 @@ export default {
           .startOf('day')
           .fromNow()
         e.name = e.author.name
-        e.show = e.id == id ? true : false // 根据url 打开默认详情
-        if (e.show) {
-          pass = true
-        }
+        e.id == id ? this.$store.getters.multiWindowTag['Tag'].push(e) : false // 根据url 打开默认详情 逻辑变更 监听全放在list 里执行
+        console.log(e.id == id, this.$store.getters.multiWindowTag['Tag'])
       }
-      if (pass) {
-        getBlogDetail(id).then(items => {
-          let use_data = res.results.find(f => f.id == id)
-          use_data.detailData = items
-          this.$store.getters.multiWindowTag['Tag'].push(use_data) // 如果打开则同步wintag
-          // e.detailData = res
-          this.$forceUpdate()
-          this.w = this.$refs.all.$el.offsetWidth
-          this.h = this.$refs.all.$el.offsetHeight
-          this.blogListData = res.results
-        })
-      } else {
-        this.blogListData = res.results
-      }
+      this.blogListData = res.results
     })
   },
   mounted() {

@@ -10,6 +10,7 @@
       <blogPrompter :inString="data" v-on:outString="outStringChange"></blogPrompter>
     </div>
       <div slot="content">
+        <baseSearch :inString="data" :visible="visible"></baseSearch>
       </div>
       <a-input-search v-model="data" @change="change" @click="clickInput" @blur="blurInput" placeholder="请输入搜索..."/>
     </a-popover>
@@ -19,11 +20,13 @@
 <script>
 import { mixin } from '@/utils/mixin'
 import blogPrompter from '@/components/BlogPrompter/index.vue'
+import baseSearch from './baseSearch.vue';
 
 export default {
   name: 'inputSearch',
   components: {
-    blogPrompter
+    blogPrompter,
+    baseSearch
   },
   mixins: [mixin],
   data () {
@@ -48,9 +51,10 @@ export default {
       this.isTheInput = true;
     },
     blurInput() {
-      this.isTheInput = false;
-      this.visible = false;
-      this.data = ''
+      if(!this.data) {
+        this.isTheInput = false;
+        this.visible = false;
+      }
     }
   },
   beforeDestroy () {

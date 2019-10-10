@@ -72,8 +72,16 @@ export default {
       this.rw = val
     },
     'multiWindowTag.Tag': {
-      handler: function() {
-        console.log(9)
+      handler: function(Value) {
+        // 为了同步标签和窗口打开 增加监听
+        console.log(Value, `哪里错了`)
+        for(let i in Value) {
+          let item = Value[i]
+          // 如果没有开起来则goDetail
+          if(!item.show) {
+            this.goDetail(item, true)
+          }
+        }
       },
       deep: true
     }
@@ -120,25 +128,36 @@ export default {
     }
   },
   methods: {
-    goDetail(item) {
-      if(!item.show) {
-        item.close = this.closeAction // 挂载关闭方法
-        this.multiWindowTag['Tag'].push(item)
+    goDetail(item, pass = false) {
+      // 兼容各处使用
+      let index = this.data.findIndex(f => f.id === item.id)
+      let real_item = this.data[index]
+      console.log(pass, 8888)
+      if(!real_item.show) {
+        console.log(this.closeAction, '哪去了')
+        real_item.close = this.closeAction // 挂载关闭方法
+        // 已经存在Tag 中
+        if(!pass) {
+          this.multiWindowTag['Tag'].push(real_item)
+        }else {
+          // 通过监听进来的方法要补需要的动作
+          this.multiWindowTag['Tag'].find(f => f.id === real_item.id)['close'] = this.closeAction
+        }
         this.loading = true
         // 给默认长宽
         this.rw = this.$refs.card.$el.offsetWidth
         this.showHeight = 430
-        getBlogDetail(item.id).then(res => {
-          item.detailData = res
+        getBlogDetail(real_item.id).then(res => {
+          real_item.detailData = res
           this.loading = false
           this.$forceUpdate()
         })
   
-        item.show = true // 这个地方只负责打开窗口
+        real_item.show = true // 这个地方只负责打开窗口
         this.$router.push({
           name: 'Workplace',
           query: {
-            window: item.id
+            window: real_item.id
           }
         })
       }
@@ -153,11 +172,26 @@ export default {
     },
     closeAction(item) {
       item.show = false
-      let index = this.multiWindowTag['Tag'].findIndex(f => item === f)
+      this.data.find(f => f.id === item.id).show = false;
+      let index = this.multiWindowTag['Tag'].findIndex(f => item.id === f.id)
       if(index > -1) {
         this.multiWindowTag['Tag'].splice(index, 1) // 找到对应删除
       }
-      
+      // 如果还有长度则取最后一个的id 否则清空url
+      if(this.multiWindowTag['Tag'].length > 0 ) {
+        let id = this.multiWindowTag['Tag'][this.multiWindowTag['Tag'].length - 1]['id']
+         this.$router.push({
+          name: 'Workplace',
+          query: {
+            window: id
+          }
+        })
+      }else {
+         this.$router.push({
+          name: 'Workplace',
+        })
+      }
+      this.$forceUpdate();
     },
     hiddenAction(item) {
       item.show = false
