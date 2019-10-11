@@ -32,7 +32,7 @@ export default {
           return this.data = []
         }
         this.loading = true;
-        getUserList({title: value}).then((res) => {
+        getUserList({search: value}).then((res) => {
           this.loading = false;
           this.data = res.results
           console.log(this.data, 8888)
