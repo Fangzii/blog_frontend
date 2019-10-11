@@ -3,7 +3,7 @@
     <div class="base_informatization">
       <a-avatar :size="hidden? 38 : 52" icon="user" :src="logo" class="_logo"/>
       <!-- <transition name="fade"> -->
-        <div v-show="!hidden">
+        <div v-if="!hidden">
           <div v-for="(item, index) in userInfoArr" :key="index">
             <a-icon :type="`${item.type}`" class="icon"/>
             <span>{{item.show}}</span>
@@ -26,7 +26,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: 'Ant Design Pro',
+      default:"Fang's Blog",
       required: false
     },
     showTitle: {
@@ -98,6 +98,7 @@ export default {
 }
 
 ._logo {
+  filter: invert(100%) !important;
   margin-bottom: 20px !important;
 }
 
