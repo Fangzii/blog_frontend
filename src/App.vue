@@ -24,6 +24,7 @@ export default {
 #app {
   height: 100%;
 }
+::-webkit-scrollbar {display:none};
 .fang-handle-class {
   position: absolute;
   /* background-color: pink; */
