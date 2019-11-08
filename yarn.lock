@@ -6448,9 +6448,9 @@ js-tokens@^3.0.2:
   integrity sha1-mGbfOVECEw449/mWvOtlRDIJwls=
 
 js-yaml@^3.12.0, js-yaml@^3.7.0, js-yaml@^3.9.0, js-yaml@^3.9.1:
-  version "3.12.2"
-  resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.12.2.tgz#ef1d067c5a9d9cb65bd72f285b5d8105c77f14fc"
-  integrity sha512-QHn/Lh/7HhZ/Twc7vJYQTkjuCa0kaCcDcjK5Zlk2rvnUpy7DxMJ23+Jc2dcyvltwQVg1nygAVlB2oRDFHoRS5Q==
+  version "3.13.1"
+  resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.13.1.tgz#aff151b30bfdfa8e49e05da22e7415e9dfa37847"
+  integrity sha512-YfbcO7jXDdyj0DGxYVSlSeQNHbD7XPWvrVWeVUujrQEoZzWJIRrCPoyk6kL6IAjAG2IolMK4T0hNUe0HOUs5Jw==
   dependencies:
     argparse "^1.0.7"
     esprima "^4.0.0"
@@ -10412,6 +10412,16 @@ vue-cropper@0.4.4:
     vue-template-compiler "^2.5.17"
     webpack "^4.20.2"
 
+vue-draggable-resizable-gorkys@^2.2.0:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/vue-draggable-resizable-gorkys/-/vue-draggable-resizable-gorkys-2.2.1.tgz#6c4106059c6deb5cb422ec5444cb5ea8b121a879"
+  integrity sha512-4DKTuFR5EzXuWae1bHjwZjP+S8340Alvaa1bRKOGHcW9NXXcBeYqwEmjhE1U4qjglbN12D+quq/TeRvxOpJP2A==
+
+vue-draggable-resizable@^2.0.0-rc2:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/vue-draggable-resizable/-/vue-draggable-resizable-2.0.1.tgz#fb98d0997b1cfa8e3ba90f723cf8b605012cd96d"
+  integrity sha512-khy+BfCnw+/NK/u7pULKNdERI/ry4BnnyKQk0qkiCNkRXWuWR/lFuADTYN8ZB25GX2H1c7PWRMRPENI6v2YTUA==
+
 vue-eslint-parser@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/vue-eslint-parser/-/vue-eslint-parser-2.0.3.tgz#c268c96c6d94cfe3d938a5f7593959b0ca3360d1"
@@ -10467,6 +10477,11 @@ vue-loader@^15.6.2:
     loader-utils "^1.1.0"
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
+
+vue-loading-overlay@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/vue-loading-overlay/-/vue-loading-overlay-3.2.0.tgz#7896f195e26a8d915219139a096367c9ad2c3c61"
+  integrity sha512-QBHa+vwcQ3k3oKp4pucP7RHWHSQvgVWFlDFqSaXLu+kCuEv1PZCoerAo1T04enF5y9yMFCqh7L9ChrWHy7HYvA==
 
 vue-ls@^3.2.0:
   version "3.2.1"
