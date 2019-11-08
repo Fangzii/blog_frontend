@@ -5,7 +5,7 @@ function resolve (dir) {
   return path.join(__dirname, dir)
 }
 
-const baseAPI = 'http://fangzicheng.cn/api/'
+const baseAPI = 'http://3.114.86.155/api/'
 
 // vue.config.js
 module.exports = {
