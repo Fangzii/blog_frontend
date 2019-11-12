@@ -1,5 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
+const TerserPlugin = require('terser-webpack-plugin')
 
 function resolve (dir) {
   return path.join(__dirname, dir)
@@ -27,7 +28,18 @@ module.exports = {
     plugins: [
       // Ignore all locale files of moment.js
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
-    ]
+    ],
+    optimization: {
+      minimizer: [
+        new TerserPlugin({
+          terserOptions: {
+            compress: {
+              drop_console: true // 清除console
+            }
+          }
+        })
+      ]
+    }
   },
 
   chainWebpack: (config) => {
