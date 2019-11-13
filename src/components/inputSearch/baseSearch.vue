@@ -27,7 +27,6 @@ export default {
   },
   watch: {
       'inString': function(value) {
-        console.log(999, value)
         if(!this.visible) {
           return this.data = []
         }
@@ -35,7 +34,6 @@ export default {
         getUserList({search: value}).then((res) => {
           this.loading = false;
           this.data = res.results
-          console.log(this.data, 8888)
         })
       }
   },
@@ -50,6 +48,7 @@ export default {
       if(this.multiWindowTag['Tag'].findIndex(f => f.id === item.id) === -1) {
         this.multiWindowTag['Tag'].push(item)
       }
+      this.$emit(`afterClick`)
     }
   },
   created() {}

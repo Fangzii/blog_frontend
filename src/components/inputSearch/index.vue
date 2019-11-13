@@ -7,10 +7,11 @@
       style="top: 10px"
     >
     <div slot="title">
+      <!-- 提词器 -->
       <blogPrompter :inString="data" v-on:outString="outStringChange"></blogPrompter>
     </div>
       <div slot="content">
-        <baseSearch :inString="data" :visible="visible"></baseSearch>
+        <baseSearch :inString="data" :visible="visible" v-on:afterClick="afterClick"></baseSearch>
       </div>
       <a-input-search v-model="data" @change="change" @click="clickInput" @blur="blurInput" placeholder="请输入搜索..."/>
     </a-popover>
@@ -42,7 +43,7 @@ export default {
   },
   methods: {
     outStringChange(value) {
-      console.log(value, 8888999999)
+      console.log(value, 999)
     },
     change(value) {
       this.visible = this.data ? true : false
@@ -55,6 +56,12 @@ export default {
         this.isTheInput = false;
         this.visible = false;
       }
+    },
+    // 点击以后清空
+    afterClick() {
+      this.data = ''
+      this.isTheInput = false;
+      this.visible = false;
     }
   },
   beforeDestroy () {
