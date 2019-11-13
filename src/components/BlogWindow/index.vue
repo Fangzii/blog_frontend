@@ -29,7 +29,7 @@
                     style="cursor: pointer;"
                   >
                     <transition>
-                      <div v-show="true" class="window-aciton">
+                      <div v-show="actionShow" class="window-aciton">
                         <fang-icon :type="`${items.icon}`" :style="`position: relative;bottom: 2px;right: 0px;transform:${items.icon === 'icon-zhankai'? 'rotate(45deg)': 'scale(0.9)'};`" class="win-action"></fang-icon>
                       </div>
                     </transition>
