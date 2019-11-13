@@ -16,15 +16,31 @@
           <a-col :span="8">
             <div class="window-action-button">
               <a-row>
-                <a-col :span="8" v-for="(items, i) in buttonArr" :key="i">
-                  <div :class="`window-button ${items.color}`" @click="items.action" style="cursor: pointer;"></div>
+                <a-col
+                  :span="8"
+                  v-for="(items, i) in buttonArr"
+                  :key="i"
+                  @mouseenter="actionShow = true"
+                  @mouseleave="actionShow = false"
+                >
+                  <div
+                    :class="`window-button ${items.color}`"
+                    @click="items.action"
+                    style="cursor: pointer;"
+                  >
+                    <transition>
+                      <div v-show="true" class="window-aciton">
+                        <fang-icon :type="`${items.icon}`" :style="`position: relative;bottom: 2px;right: 0px;transform:${items.icon === 'icon-zhankai'? 'rotate(45deg)': 'scale(0.9)'};`" class="win-action"></fang-icon>
+                      </div>
+                    </transition>
+                  </div>
                 </a-col>
               </a-row>
             </div>
           </a-col>
           <a-col>
             <!-- 标题插槽 -->
-            <span class="drag-handle"> 
+            <span class="drag-handle">
               <slot name="title"></slot>
             </span>
           </a-col>
@@ -33,21 +49,29 @@
       <!-- 内容插槽 -->
       <div class="window-html">
         <slot name="content"></slot>
-      <div v-if="loading" :style="`filter: invert(80%);padding:20px 35px 0px 0px;overflow :auto;`">
-        <a-skeleton :paragraph="{rows: 5}" active :title="false"/>
-      </div>
+        <div
+          v-if="loading"
+          :style="`filter: invert(80%);padding:20px 35px 0px 0px;overflow :auto;`"
+        >
+          <a-skeleton :paragraph="{rows: 5}" active :title="false"/>
+        </div>
       </div>
     </vdr>
   </div>
 </template>
 
 <script>
+import { Icon } from 'ant-design-vue';
+const MyIcon = Icon.createFromIconfontCN({
+  scriptUrl: '//at.alicdn.com/t/font_1505804_ll3k9cxne0h.js', // 在 iconfont.cn 上生成
+});
 import vdr from 'vue-draggable-resizable-gorkys'
 import 'vue-draggable-resizable-gorkys/dist/VueDraggableResizable.css'
 export default {
   name: 'BlogWindow',
   components: {
-    vdr
+    vdr,
+    'fang-icon': MyIcon,
   },
   props: {
     // 默认定义字段
@@ -73,10 +97,11 @@ export default {
   data() {
     return {
       buttonArr: [
-        { color: 'red', action: this.closeAction, icon: 'close' },
-        { color: 'yellow', action: this.hiddenAction, icon: 'minus' },
-        { color: 'green', action: this.magnifyAction, icon: 'arrows-alt' }
-      ]
+        { color: 'red', action: this.closeAction, icon: 'icon-close' },
+        { color: 'yellow', action: this.hiddenAction, icon: 'icon-more' },
+        { color: 'green', action: this.magnifyAction, icon: 'icon-zhankai' }
+      ],
+      actionShow: false
     }
   },
   methods: {
@@ -111,24 +136,24 @@ export default {
   border-radius: 8px 8px 0px 0px !important;
   // box-shadow: 0px 0px 1px #5d5858;
   &-header {
-    font-size: 12px;
+    font-size: 13px;
     background: #3a3b3f;
     color: #bbbbbb;
-    height: 20px;
+    height: 23px;
     padding: 5px;
     border-radius: 8px 8px 0px 0px;
   }
 
   &-action-button {
-    margin-left: 3px;
-    width: 50px;
+    margin-left: 8px;
+    width: 60px;
   }
 
   &-button {
     color: #3a3b3f;
-    border-radius: 10px;
-    width: 10px;
-    height: 10px;
+    border-radius: 13px;
+    width: 13px;
+    height: 13px;
     background: red;
   }
 
@@ -143,6 +168,12 @@ export default {
   width: 80px;
   position: relative;
   bottom: 3px;
+}
+
+.win-action:hover {
+  font-weight: 800;
+  color: #bb9b9b;
+  transition: color 0.3s;
 }
 
 // .drag-handle:hover {
@@ -167,5 +198,15 @@ export default {
 
 .green {
   background: #3ccd44;
+}
+
+.v-enter,
+.v-leave-to {
+  opacity: 0;
+  // transform: translateX(100px);
+}
+.v-enter-active,
+.v-leave-active {
+  transition: all 0.4s ease;
 }
 </style>
