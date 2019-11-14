@@ -1,6 +1,6 @@
 <template>
   <a-layout-sider
-    :class="['blog-menu','sider', isDesktop() ? null : 'shadow', theme, fixSiderbar ? 'ant-fixed-sidemenu' : null ]"
+    :class="[!isMobile()?'sider': 'sider_mobile','blog-menu', isDesktop() ? null : 'shadow', theme, fixSiderbar ? 'ant-fixed-sidemenu' : null ]"
     width="256px"
     height="300px"
     :collapsible="collapsible"
@@ -18,7 +18,7 @@
       @select="onSelect"
       :style="`background: #202020;${collapsed? 'right: 10px;position: relative;' : ''}`"
     ></s-menu>
-    <div class="menuBottomStyle">
+    <div class="menuBottomStyle" v-if="!isMobile()">
       <div
         v-for="(item, index) in graph"
         :key="index"
@@ -99,6 +99,10 @@ export default {
   position: relative;
   z-index: 10;
   min-height: 80vh;
+}
+
+.sider_mobile {
+  min-height: 130vh;
 }
 
 .oneStyle:hover {
