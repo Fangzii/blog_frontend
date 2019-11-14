@@ -30,7 +30,7 @@
                   >
                     <transition>
                       <div v-show="actionShow" class="window-aciton">
-                        <fang-icon :type="`${items.icon}`" :style="`position: relative;bottom: 2px;right: 0px;transform:${items.icon === 'icon-zhankai'? 'rotate(45deg)': 'scale(0.9)'};`" class="win-action"></fang-icon>
+                        <blog-icon :type="`${items.icon}`" :style="`position: relative;bottom: 2px;right: 0px;transform:${items.icon === 'icon-zhankai'? 'rotate(45deg)': 'scale(0.9)'};`" class="win-action"></blog-icon>
                       </div>
                     </transition>
                   </div>
@@ -63,7 +63,7 @@
 <script>
 import { Icon } from 'ant-design-vue';
 const MyIcon = Icon.createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_1505804_ll3k9cxne0h.js', // 在 iconfont.cn 上生成
+  scriptUrl: '//at.alicdn.com/t/font_1505804_0wficryf78b.js', // 在 iconfont.cn 上生成
 });
 import vdr from 'vue-draggable-resizable-gorkys'
 import 'vue-draggable-resizable-gorkys/dist/VueDraggableResizable.css'
@@ -71,7 +71,7 @@ export default {
   name: 'BlogWindow',
   components: {
     vdr,
-    'fang-icon': MyIcon,
+    'blog-icon': MyIcon,
   },
   props: {
     // 默认定义字段

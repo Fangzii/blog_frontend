@@ -8,8 +8,8 @@
         <div v-if="mode === 'sidemenu'" class="header" style="background: #3a3b3f;">
           <a-row>
             <a-col :span="1">
-              <a-icon v-if="device==='mobile'" class="trigger" :type="collapsed ? 'menu-fold' : 'menu-unfold'" @click="toggle" style="color: #3a3b3f;filter: invert(100%);"/>
-              <a-icon v-else class="trigger" :type="collapsed ? 'menu-unfold' : 'menu-fold'" @click="toggle" style="color: #3a3b3f;filter: invert(100%);"/>
+              <blog-icon v-if="device==='mobile'" class="trigger" :type="collapsed ? 'icon-x_shouqi' : 'icon-x_zhankai'" @click="toggle" style="color: #3a3b3f;filter: invert(100%);transform: scale(0.7);position: relative;right: 5px;"/>
+              <blog-icon v-else class="trigger" :type="collapsed ? 'icon-x_zhankai' : 'icon-x_shouqi'" @click="toggle" style="color: #3a3b3f;filter: invert(100%);transform: scale(0.7);position: relative;right: 5px;"/>
             </a-col>
             <a-col :span="17" style="line-height: 20px;top: 15px;">
                 <blogWinTag />
@@ -37,6 +37,10 @@
 </template>
 
 <script>
+import { Icon } from 'ant-design-vue';
+const MyIcon = Icon.createFromIconfontCN({
+  scriptUrl: '//at.alicdn.com/t/font_1505804_0wficryf78b.js', // 在 iconfont.cn 上生成
+});
 import blogWinTag from '@/components/BlogWinTag/index.vue'
 import UserMenu from '../tools/UserMenu'
 import SMenu from '../Menu/'
@@ -51,7 +55,8 @@ export default {
     SMenu,
     Logo,
     InputSearch,
-    blogWinTag
+    blogWinTag,
+    'blog-icon': MyIcon,
   },
   mixins: [mixin],
   props: {

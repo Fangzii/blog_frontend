@@ -15,7 +15,7 @@
             <h4 class="winTag-title">{{item.title}}</h4>
           </a-col>
           <a-col :span="2">
-            <fang-icon type="icon-close" class="winTag-close" @click="item.close(item)"></fang-icon>
+            <blog-icon type="icon-close" class="winTag-close" @click="item.close(item)"></blog-icon>
           </a-col>
         </a-row>
       </div>
@@ -26,14 +26,14 @@
 <script>
 import { Icon } from 'ant-design-vue';
 const MyIcon = Icon.createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_1505804_ll3k9cxne0h.js', // 在 iconfont.cn 上生成
+  scriptUrl: '//at.alicdn.com/t/font_1505804_0wficryf78b.js', // 在 iconfont.cn 上生成
 });
 import { mapGetters } from 'vuex'
 import { setTimeout } from 'timers'
 export default {
   name: 'BlogWinTag',
   components: {
-    'fang-icon': MyIcon,
+    'blog-icon': MyIcon,
   },
   computed: {
     multiWindowTag: function() {
