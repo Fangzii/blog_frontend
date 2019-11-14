@@ -3,8 +3,8 @@
     <vdr
       class="window"
       :snap="true"
-      :w="900"
-      :h="moreShow? 500 : 460"
+      :w="900 + addWidth"
+      :h="(moreShow? 500 : 460) + addHeight"
       @resizing="sizeChange"
       class-name-handle="fang-handle-class"
       class-name-dragging="fang-dragging-class"
@@ -135,7 +135,9 @@ export default {
         { color: 'green', action: this.magnifyAction, icon: 'icon-zhankai' }
       ],
       actionShow: false,
-      moreShow: false
+      moreShow: false,
+      addHeight: 0,
+      addWidth: 0
     }
   },
   methods: {
@@ -150,7 +152,16 @@ export default {
       this.$emit('more', 'true')
     },
     magnifyAction() {
-      console.log('magnifyAction')
+      // 放大缩小判断
+      if(this.addWidth) {
+        this.addWidth = 0
+        this.addHeight = 0
+      }else {
+        let pass = JSON.parse(localStorage.getItem('pro__SIDEBAR_TYPE'))['value'] // 获取sidebar是否开启
+        this.addHeight = window.innerHeight - 400 - 200;
+        this.addWidth = (!pass? window.innerWidth - 100 - 900: window.innerWidth - 200 - 900)
+      }
+      this.$emit(`magnify`, this.addHeight)
     },
     sizeChange(left, top, width, height) {
       this.$emit('sizeChange', left, top, width, height)

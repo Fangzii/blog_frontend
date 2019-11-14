@@ -11,13 +11,13 @@
     <router-view></router-view>
     <a slot="extra"></a>
     <div :key="i" v-for="(item, i) in data">
-      <blog-window v-if="item.show" v-on:close="closeAction(item)" :base_information="{author: item.author.name ,time: item.all_time, view: item.views }" :loading="loading">
+      <blog-window v-if="item.show" v-on:close="closeAction(item)" :base_information="{author: item.author.name ,time: item.all_time, view: item.views }" :loading="loading" v-on:magnify="magnify">
         <span slot="title">{{ item[title] }}</span>
         <div slot="content">
           <div v-if="!loading && item.detailData" class="window-html">
             <div
               v-html="item.detailData.body"
-              :style="`height: ${showHeight - 20}px;overflow :auto;filter: invert(100%);`"
+              :style="`height: ${showHeight - 20 + addHeight}px;overflow :auto;filter: invert(100%);`"
             ></div>
           </div>
         </div>
@@ -125,6 +125,7 @@ export default {
       showHeight: 400,
       showWidth: 50,
       loading: false,
+      addHeight: 0,
     }
   },
   methods: {
@@ -211,6 +212,9 @@ export default {
     },
     windowIdName(item) {
       return `window_id_${item.id}`
+    },
+    magnify(addHeight) {
+      this.addHeight = addHeight
     }
   }
 }
