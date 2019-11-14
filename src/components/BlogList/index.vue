@@ -11,7 +11,7 @@
     <router-view></router-view>
     <a slot="extra"></a>
     <div :key="i" v-for="(item, i) in data">
-      <blog-window v-if="item.show" v-on:close="closeAction(item)" v-on:hidden="hiddenAction(item)" :loading="loading">
+      <blog-window v-if="item.show" v-on:close="closeAction(item)" :base_information="{author: item.author.name ,time: item.all_time, view: item.views }" :loading="loading">
         <span slot="title">{{ item[title] }}</span>
         <div slot="content">
           <div v-if="!loading && item.detailData" class="window-html">
@@ -149,6 +149,7 @@ export default {
         this.showHeight = 430
         getBlogDetail(real_item.id).then(res => {
           real_item.detailData = res
+          real_item.views = res.views // 更新信息
           this.loading = false
           this.$forceUpdate()
         })
@@ -194,11 +195,11 @@ export default {
       this.$forceUpdate();
     },
     hiddenAction(item) {
-      item.show = false
-      let index = this.multiWindowTag['Tag'].findIndex(f => item === f)
-      if(index > -1) {
-        this.multiWindowTag['Tag'][index]['hidden'] = true
-      }
+      // item.show = false
+      // let index = this.multiWindowTag['Tag'].findIndex(f => item === f)
+      // if(index > -1) {
+      //   this.multiWindowTag['Tag'][index]['hidden'] = true
+      // }
       // console.log('hiddenAction')
     },
     magnifyAction(item) {

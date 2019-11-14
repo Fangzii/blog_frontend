@@ -4,7 +4,7 @@
       class="window"
       :snap="true"
       :w="900"
-      :h="450"
+      :h="moreShow? 500 : 460"
       @resizing="sizeChange"
       class-name-handle="fang-handle-class"
       class-name-dragging="fang-dragging-class"
@@ -46,6 +46,32 @@
           </a-col>
         </a-row>
       </div>
+      <!-- 更多操作范围 -->
+      <transition name='more'>
+        <div class="window-more" v-if="moreShow">
+          <slot name="more"></slot>
+          <div class="fixed_more">
+            <span class="more_head">
+              <a-tooltip placement="leftTop" title="作者">
+                <blog-icon type="icon-x_yonghu"/>
+              </a-tooltip>
+              <span class="more_field">{{base_information.author}}</span>
+            </span>
+            <span class="more_head">
+              <a-tooltip placement="leftTop" title="创建时间">
+                <blog-icon type="icon-x_nav_shangbaoyuanshangbaolishi"/>
+              </a-tooltip>
+              <span class="more_field">{{base_information.time}}</span>
+            </span>
+            <span class="more_head">
+              <a-tooltip placement="leftTop" title="浏览次数">
+                <blog-icon type="icon-x_guanzhu1"/>
+              </a-tooltip>
+              <span class="more_field">{{base_information.view}}</span>
+            </span>
+          </div>
+        </div>
+      </transition>
       <!-- 内容插槽 -->
       <div class="window-html">
         <slot name="content"></slot>
@@ -92,16 +118,24 @@ export default {
     },
     loading: {
       default: false
+    },
+    base_information : {
+      default: {
+        author: 'fangzicheng',
+        time: '***',
+        view: 233
+      }
     }
   },
   data() {
     return {
       buttonArr: [
         { color: 'red', action: this.closeAction, icon: 'icon-close' },
-        { color: 'yellow', action: this.hiddenAction, icon: 'icon-more' },
+        { color: 'yellow', action: this.moreAction, icon: 'icon-more' },
         { color: 'green', action: this.magnifyAction, icon: 'icon-zhankai' }
       ],
-      actionShow: false
+      actionShow: false,
+      moreShow: false
     }
   },
   methods: {
@@ -110,8 +144,10 @@ export default {
       console.log('closeAction')
       this.$emit('close', 'true')
     },
-    hiddenAction() {
-      this.$emit('hidden', 'true')
+    moreAction() {
+      this.moreShow = !this.moreShow;
+      console.log(this.moreShow)
+      this.$emit('more', 'true')
     },
     magnifyAction() {
       console.log('magnifyAction')
@@ -128,6 +164,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .window {
+  transition: height .3s;
   border: 1px solid #3a3b3f;
   background: #1f1f1f;
   z-index: 999 !important;
@@ -160,6 +197,13 @@ export default {
   &-html {
     padding: 10px;
   }
+
+  &-more {
+    height: 40px;
+    width: 100%;
+    background: #525252eb;
+    padding: 8px 12px 8px 12px;
+  }
 }
 
 .drag-handle {
@@ -169,11 +213,31 @@ export default {
   position: relative;
   bottom: 3px;
 }
-
+.win-action {
+  color: #524949;
+}
 .win-action:hover {
   font-weight: 800;
-  color: #bb9b9b;
+  color: #000000;
   transition: color 0.3s;
+}
+
+.fixed_more {
+  float: right;
+  color: #efe6e6;
+  font-weight: 700;
+}
+
+.more_field {
+  margin-left: 5px;
+  position: relative;
+  bottom: 1px;
+  margin-right: 10px;
+  font-size: 12px;
+}
+
+.more_head {
+  // margin-left: 10px;
 }
 
 // .drag-handle:hover {
@@ -208,5 +272,15 @@ export default {
 .v-enter-active,
 .v-leave-active {
   transition: all 0.4s ease;
+}
+
+.more-enter,
+.more-leave-to {
+  opacity: 0;
+  // transform: translateX(100px);
+}
+.more-enter-active,
+.more-leave-active {
+  transition: all 0.3s ease;
 }
 </style>
