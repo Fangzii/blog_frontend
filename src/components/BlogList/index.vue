@@ -17,7 +17,7 @@
           <div v-if="!loading && item.detailData" class="window-html">
             <div
               v-html="item.detailData.body"
-              :style="`height: ${showHeight - 20 + addHeight}px;overflow :auto;filter: invert(100%);`"
+              :style="`height: ${isMobile()? isMobileHeight():(showHeight - 20 + addHeight)}px;overflow :auto;filter: invert(100%);`"
             ></div>
           </div>
         </div>
@@ -26,7 +26,7 @@
         <a-card
           :bordered="false"
           :body-style="{ padding: 0 }"
-          @click="isMobile()? goMobileDetail(item) : goDetail(item)"
+          @click="goDetail(item)"
         >
           <a-card-meta>
             <div slot="title" class="card-title">
@@ -215,6 +215,9 @@ export default {
     },
     magnify(addHeight) {
       this.addHeight = addHeight
+    },
+    isMobileHeight() {
+      return window.innerHeight - 230
     }
   }
 }

@@ -3,13 +3,14 @@
     <vdr
       class="window"
       :snap="true"
-      :w="900 + addWidth"
-      :h="(moreShow? 500 : 460) + addHeight"
+      :w="isMobile()? isMobileWidth() : (900 + addWidth)"
+      :h="isMobile()? isMobileHeight() : ((moreShow? 500 : 460) + addHeight)"
       @resizing="sizeChange"
+      :draggable="!isMobile()"
       class-name-handle="fang-handle-class"
       class-name-dragging="fang-dragging-class"
       :handles="['tm','mr','bm','ml']"
-      :drag-handle="'.drag-handle'"
+      :drag-handle="`.drag-handle`"
     >
       <div class="window-header">
         <a-row>
@@ -30,7 +31,11 @@
                   >
                     <transition>
                       <div v-show="actionShow" class="window-aciton">
-                        <blog-icon :type="`${items.icon}`" :style="`position: relative;bottom: 2px;right: 0px;transform:${items.icon === 'icon-zhankai'? 'rotate(45deg)': 'scale(0.9)'};`" class="win-action"></blog-icon>
+                        <blog-icon
+                          :type="`${items.icon}`"
+                          :style="`position: relative;bottom: 2px;right: 0px;transform:${items.icon === 'icon-zhankai'? 'rotate(45deg)': 'scale(0.9)'};`"
+                          class="win-action"
+                        ></blog-icon>
                       </div>
                     </transition>
                   </div>
@@ -47,7 +52,7 @@
         </a-row>
       </div>
       <!-- 更多操作范围 -->
-      <transition name='more'>
+      <transition name="more">
         <div class="window-more" v-if="moreShow">
           <slot name="more"></slot>
           <div class="fixed_more">
@@ -87,18 +92,20 @@
 </template>
 
 <script>
-import { Icon } from 'ant-design-vue';
+import { Icon } from 'ant-design-vue'
 const MyIcon = Icon.createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_1505804_0wficryf78b.js', // 在 iconfont.cn 上生成
-});
+  scriptUrl: '//at.alicdn.com/t/font_1505804_0wficryf78b.js' // 在 iconfont.cn 上生成
+})
 import vdr from 'vue-draggable-resizable-gorkys'
+import { mixinDevice } from '@/utils/mixin'
 import 'vue-draggable-resizable-gorkys/dist/VueDraggableResizable.css'
 export default {
   name: 'BlogWindow',
   components: {
     vdr,
-    'blog-icon': MyIcon,
+    'blog-icon': MyIcon
   },
+  mixins: [mixinDevice],
   props: {
     // 默认定义字段
     title: {
@@ -119,7 +126,7 @@ export default {
     loading: {
       default: false
     },
-    base_information : {
+    base_information: {
       default: {
         author: 'fangzicheng',
         time: '***',
@@ -147,35 +154,40 @@ export default {
       this.$emit('close', 'true')
     },
     moreAction() {
-      this.moreShow = !this.moreShow;
+      this.moreShow = !this.moreShow
       console.log(this.moreShow)
       this.$emit('more', 'true')
     },
     magnifyAction() {
       // 放大缩小判断
-      if(this.addWidth) {
+      if (this.addWidth) {
         this.addWidth = 0
         this.addHeight = 0
-      }else {
+      } else {
         let pass = JSON.parse(localStorage.getItem('pro__SIDEBAR_TYPE'))['value'] // 获取sidebar是否开启
-        this.addHeight = window.innerHeight - 400 - 200;
-        this.addWidth = (!pass? window.innerWidth - 100 - 900: window.innerWidth - 200 - 900)
+        this.addHeight = window.innerHeight - 400 - 200
+        this.addWidth = !pass ? window.innerWidth - 100 - 900 : window.innerWidth - 200 - 900
       }
       this.$emit(`magnify`, this.addHeight)
     },
     sizeChange(left, top, width, height) {
       this.$emit('sizeChange', left, top, width, height)
+    },
+    isMobileWidth() {
+      return window.innerWidth
+    },
+    isMobileHeight() {
+      return window.innerHeight - 30
     }
   },
   created() {
-    console.log('开始?')
     this.$emit('open', 'true')
   }
 }
 </script>
 <style lang="less" scoped>
 .window {
-  transition: height .3s;
+  transition: height 0.3s;
   border: 1px solid #3a3b3f;
   background: #1f1f1f;
   z-index: 999 !important;
