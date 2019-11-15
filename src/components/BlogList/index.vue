@@ -193,6 +193,7 @@ export default {
           name: 'Workplace',
         })
       }
+      this.addHeight = 0;
       this.$forceUpdate();
     },
     hiddenAction(item) {
