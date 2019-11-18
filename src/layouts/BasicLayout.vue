@@ -113,7 +113,7 @@ export default {
   },
   created () {
     this.menus = this.mainMenu.find(item => item.path === '/').children
-    this.collapsed = true
+    this.collapsed = !this.isMobile()
   },
   mounted () {
     const userAgent = navigator.userAgent
