@@ -145,8 +145,6 @@
 <script>
 // @ is an alias to /src
 
-import Trend from '@/components/Trend'
-import AvatarList from '@/components/AvatarList'
 import CountDown from '@/components/CountDown/CountDown'
 import Ellipsis from '@/components/Ellipsis'
 import NumberInfo from '@/components/NumberInfo'
@@ -164,8 +162,6 @@ export default {
     NumberInfo,
     Ellipsis,
     CountDown,
-    Trend,
-    AvatarList,
     AvatarListItem,
     TagSelect,
     TagSelectOption,
