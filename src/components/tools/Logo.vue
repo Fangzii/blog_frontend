@@ -44,7 +44,7 @@ export default {
       default: false
     }
   },
-  data() {
+  data () {
     return {
       userInfo: null,
       userInfoArr: [],
@@ -61,15 +61,15 @@ export default {
     }
   },
   methods: {
-    getUser() {
-      let user = { name: 'fangzicheng' }
+    getUser () {
+      const user = { name: 'fangzicheng' }
       this.userInfoArr = []
       getUserInformatization(user).then(res => {
         this.userInfo = res.results[0]['informatization']
         this.logo = this.userInfo.image_url
-        let arr = Object.keys(this.userInfo)
-        let need = ['show_name', 'signature', 'location', 'weChat', 'github_url', 'link']
-        for (let i in arr) {
+        const arr = Object.keys(this.userInfo)
+        const need = ['show_name', 'signature', 'location', 'weChat', 'github_url', 'link']
+        for (const i in arr) {
           if (need.findIndex(f => f === arr[i]) > -1) {
             this.userInfoArr.push({
               show: this.userInfo[arr[i]],
@@ -81,7 +81,7 @@ export default {
       })
     }
   },
-  created() {
+  created () {
     this.getUser()
   }
 }
@@ -149,7 +149,7 @@ export default {
 .information_card {
   white-space: nowrap;
   text-overflow:ellipsis;
-  overflow:hidden;  
+  overflow:hidden;
 }
 .v-enter,
 .v-leave-to {
@@ -162,4 +162,3 @@ export default {
 }
 
 </style>
-

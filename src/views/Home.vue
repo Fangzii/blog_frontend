@@ -149,9 +149,8 @@ import CountDown from '@/components/CountDown/CountDown'
 import Ellipsis from '@/components/Ellipsis'
 import NumberInfo from '@/components/NumberInfo'
 import TagSelect from '@/components/TagSelect'
-import { DescriptionList, TagCloud } from '@/components/'
+import { DescriptionList } from '@/components/'
 
-const AvatarListItem = AvatarList.AvatarItem
 const TagSelectOption = TagSelect.Option
 
 const DescriptionListItem = DescriptionList.Item
@@ -162,10 +161,8 @@ export default {
     NumberInfo,
     Ellipsis,
     CountDown,
-    AvatarListItem,
     TagSelect,
     TagSelectOption,
-    TagCloud,
     DescriptionList,
     DescriptionListItem
   },

@@ -4,7 +4,7 @@
     <div slot="headerContent">
       <div class="title">
         <!-- {{ timeFix }}，{{ user.name }}
-        <span class="welcome-text">，{{ welcome() }}</span> -->
+        <span class="welcome-text">，{{ welcome() }}</span>-->
       </div>
     </div>
     <div>
@@ -19,7 +19,6 @@ import { mapGetters } from 'vuex'
 
 import { PageView } from '@/layouts'
 import HeadInfo from '@/components/tools/HeadInfo'
-import { Radar } from '@/components'
 import blogList from '@/components/BlogList/index'
 import moment from 'moment'
 import { getUserList, getServiceList, getUserInformatization, getBlogDetail } from '@/api/manage'
@@ -30,8 +29,7 @@ export default {
   components: {
     blogList,
     PageView,
-    HeadInfo,
-    Radar
+    HeadInfo
   },
   data() {
     return {
@@ -107,15 +105,14 @@ export default {
         e.time = moment(e.created_at)
           .startOf('day')
           .fromNow()
-        e.all_time = moment(e.created_at).format("YYYY-MM-DD") + ` (${e.time})`
+        e.all_time = moment(e.created_at).format('YYYY-MM-DD') + ` (${e.time})`
         e.name = e.author.name
-        e.id == id ? this.$store.getters.multiWindowTag['Tag'].push(e) : false // 根据url 打开默认详情 逻辑变更 监听全放在list 里执行
-        console.log(e.id == id, this.$store.getters.multiWindowTag['Tag'])
+        e.id === id ? this.$store.getters.multiWindowTag['Tag'].push(e) : false // 根据url 打开默认详情 逻辑变更 监听全放在list 里执行
       }
       this.blogListData = res.results
     })
   },
-  mounted() {
+  mounted () {
     this.getProjects()
     this.getActivity()
     this.getTeams()
@@ -124,30 +121,30 @@ export default {
   methods: {
     ...mapGetters(['nickname', 'welcome']),
 
-    userInfo() {
-      let user = { name: 'fangzicheng' }
+    userInfo () {
+      const user = { name: 'fangzicheng' }
       getUserInformatization(user).then(res => {
         this.userInfo = res.results[0]
       })
       return this.userInfo
     },
-    getProjects() {
+    getProjects () {
       this.$http.get('/list/search/projects').then(res => {
         this.projects = res.result && res.result.data
         this.loading = false
       })
     },
-    getActivity() {
+    getActivity () {
       this.$http.get('/workplace/activity').then(res => {
         this.activities = res.result
       })
     },
-    getTeams() {
+    getTeams () {
       this.$http.get('/workplace/teams').then(res => {
         this.teams = res.result
       })
     },
-    initRadar() {
+    initRadar () {
       this.radarLoading = true
 
       this.$http.get('/workplace/radar').then(res => {
