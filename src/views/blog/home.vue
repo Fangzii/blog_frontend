@@ -107,6 +107,7 @@ export default {
           .fromNow()
         e.all_time = moment(e.created_at).format('YYYY-MM-DD') + ` (${e.time})`
         e.name = e.author.name
+        e.messageBoardData = []; // 留言板默认值
         e.id == id ? this.$store.getters.multiWindowTag['Tag'].push(e) : false // 根据url 打开默认详情 逻辑变更 监听全放在list 里执行
       }
       this.blogListData = res.results

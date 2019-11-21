@@ -7,7 +7,8 @@ const api = {
   service: '/service',
   permission: '/permission',
   permissionNoPager: '/permission/no-pager',
-  orgTree: '/org/tree'
+  orgTree: '/org/tree',
+  messageBoard: '/v1/messageboard'
 }
 
 export default api
@@ -23,6 +24,14 @@ export function getUserList (parameter) {
 export function getBlogDetail (id, parameter) {
   return axios({
     url: api.entries + id + '/',
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function getMessageBoard (id, parameter) {
+  return axios({
+    url: api.entries + id + '/message/',
     method: 'get',
     params: parameter
   })
@@ -73,6 +82,14 @@ export function getOrgTree (parameter) {
 export function saveService (parameter) {
   return axios({
     url: api.service,
+    method: parameter.id === 0 ? 'post' : 'put',
+    data: parameter
+  })
+}
+
+export function setMessage (id, parameter) {
+  return axios({
+    url: api.entries + id + '/set_message/',
     method: parameter.id === 0 ? 'post' : 'put',
     data: parameter
   })

@@ -11,8 +11,69 @@
     <router-view></router-view>
     <a slot="extra"></a>
     <div :key="i" v-for="(item, i) in data">
-      <blog-window v-if="item.show" v-on:close="closeAction(item)" :base_information="{author: item.author.name ,time: item.all_time, view: item.views }" :loading="loading" v-on:magnify="magnify">
+      <blog-window
+        v-if="item.show"
+        v-on:close="closeAction(item)"
+        :base_information="{author: item.author.name ,time: item.all_time, view: item.views }"
+        :loading="loading"
+        v-on:magnify="magnify"
+      >
         <span slot="title">{{ item[title] }}</span>
+        <template slot="more">
+          <a-popover
+            trigger="click"
+            v-model="item.visible"
+            placement="bottomLeft"
+            overlayClassName="message_board"
+            :autoAdjustOverflow="false"
+            :getPopupContainer="
+              triggerNode => {
+                return triggerNode.parentNode;
+              }
+            "
+          >
+            <span :class="`message_board ${item.visible? 'message_board_clicked': ''}`">
+              <blog-icon type="icon-x_liuyan"/>
+            </span>
+            <template slot="content">
+              <a-spin :spinning="messageLoading">
+                <blog-icon
+                  slot="indicator"
+                  type="icon-x_gengxin"
+                  style="transform: rotateY(180deg);"
+                  spin
+                />
+                <div class="message_board_content">
+                  <div class="message_board_content_main">
+                    <div v-for="(items, index) in item.messageBoardData" :key="index">
+                      <div class="message_board_content_main_body">{{items.body}}</div>
+                      <div class="message_board_content_main_head">
+                        <span>{{items.operator && items.operator.name}}</span>
+                        <div>{{items.time}}</div>
+                      </div>
+                      <div class="message_board_content_main_line"></div>
+                    </div>
+                    <div
+                      v-if="item.messageBoardData.length === 0"
+                      class="message_board_content_main_nodata"
+                    >
+                      <blog-icon type="icon-x_penzai"/>添加一条评论吧~
+                    </div>
+                  </div>
+                  <div class="message_board_content_input">
+                    <a-input
+                      :disabled="messageLoading"
+                      size="small"
+                      v-model="addMessage"
+                      @pressEnter="inputEnter($event,item)"
+                      style="background: #4a754de0;border: 0px solid #000000;color: white"
+                    />
+                  </div>
+                </div>
+              </a-spin>
+            </template>
+          </a-popover>
+        </template>
         <div slot="content">
           <div v-if="!loading && item.detailData" class="window-html">
             <div
@@ -23,11 +84,7 @@
         </div>
       </blog-window>
       <a-card-grid class="project-card-grid">
-        <a-card
-          :bordered="false"
-          :body-style="{ padding: 0 }"
-          @click="goDetail(item)"
-        >
+        <a-card :bordered="false" :body-style="{ padding: 0 }" @click="goDetail(item)">
           <a-card-meta>
             <div slot="title" class="card-title">
               <a>{{ item[title] }}</a>
@@ -45,23 +102,27 @@
 </template>
 
 <script>
-// import vdr from 'vue-draggable-resizable-gorkys'
+// 业务层
+import { Icon } from 'ant-design-vue'
+const MyIcon = Icon.createFromIconfontCN({
+  scriptUrl: '//at.alicdn.com/t/font_1505804_0wficryf78b.js' // 在 iconfont.cn 上生成
+})
+import moment from 'moment'
 import blogWindow from '@/components/BlogWindow/index.vue'
 import { mixinDevice } from '@/utils/mixin.js'
-// import 'vue-draggable-resizable-gorkys/dist/VueDraggableResizable.css'
-import { getBlogDetail } from '@/api/manage'
+import { getBlogDetail, getMessageBoard, setMessage } from '@/api/manage'
 import { mapGetters } from 'vuex'
-// import blogDetail from '@/views/blog/detail.vue'
+import { setTimeout } from 'timers'
+import { Zoo } from '@/utils/zoo.js'
 export default {
   name: 'BlogList',
   components: {
     blogWindow,
-    // blogDetail
+    'blog-icon': MyIcon
   },
   computed: mapGetters({
-      multiWindowTag: 'multiWindowTag'
-    })
-  ,
+    multiWindowTag: 'multiWindowTag'
+  }),
   mixins: [mixinDevice],
   watch: {
     h(val) {
@@ -74,11 +135,10 @@ export default {
     'multiWindowTag.Tag': {
       handler: function(Value) {
         // 为了同步标签和窗口打开 增加监听
-        console.log(Value, `哪里错了`)
-        for(let i in Value) {
+        for (let i in Value) {
           let item = Value[i]
           // 如果没有开起来则goDetail
-          if(!item.show) {
+          if (!item.show) {
             this.goDetail(item, true)
           }
         }
@@ -126,6 +186,9 @@ export default {
       showWidth: 50,
       loading: false,
       addHeight: 0,
+      messageBoardData: [],
+      messageLoading: false,
+      addMessage: null
     }
   },
   methods: {
@@ -133,14 +196,12 @@ export default {
       // 兼容各处使用
       let index = this.data.findIndex(f => f.id === item.id)
       let real_item = this.data[index]
-      console.log(pass, 8888)
-      if(!real_item.show) {
-        console.log(this.closeAction, '哪去了')
+      if (!real_item.show) {
         real_item.close = this.closeAction // 挂载关闭方法
         // 已经存在Tag 中
-        if(!pass) {
+        if (!pass) {
           this.multiWindowTag['Tag'].push(real_item)
-        }else {
+        } else {
           // 通过监听进来的方法要补需要的动作
           this.multiWindowTag['Tag'].find(f => f.id === real_item.id)['close'] = this.closeAction
         }
@@ -149,12 +210,13 @@ export default {
         this.rw = this.$refs.card.$el.offsetWidth
         this.showHeight = 430
         getBlogDetail(real_item.id).then(res => {
+          this.initMessage(real_item)
           real_item.detailData = res
           real_item.views = res.views // 更新信息
           this.loading = false
           this.$forceUpdate()
         })
-  
+
         real_item.show = true // 这个地方只负责打开窗口
         this.$router.push({
           name: 'Workplace',
@@ -172,29 +234,38 @@ export default {
         }
       })
     },
+    initMessage(data) {
+      return getMessageBoard(data.id).then(res => {
+        data.messageBoardData = res
+        for (let i in data.messageBoardData) {
+          let items = data.messageBoardData[i]
+          items.time = moment(items.created_at).format('YY/MM/DD HH:mm')
+        }
+      })
+    },
     closeAction(item) {
       item.show = false
-      this.data.find(f => f.id === item.id).show = false;
+      this.data.find(f => f.id === item.id).show = false
       let index = this.multiWindowTag['Tag'].findIndex(f => item.id === f.id)
-      if(index > -1) {
+      if (index > -1) {
         this.multiWindowTag['Tag'].splice(index, 1) // 找到对应删除
       }
       // 如果还有长度则取最后一个的id 否则清空url
-      if(this.multiWindowTag['Tag'].length > 0 ) {
+      if (this.multiWindowTag['Tag'].length > 0) {
         let id = this.multiWindowTag['Tag'][this.multiWindowTag['Tag'].length - 1]['id']
-         this.$router.push({
+        this.$router.push({
           name: 'Workplace',
           query: {
             window: id
           }
         })
-      }else {
-         this.$router.push({
-          name: 'Workplace',
+      } else {
+        this.$router.push({
+          name: 'Workplace'
         })
       }
-      this.addHeight = 0;
-      this.$forceUpdate();
+      this.addHeight = 0
+      this.$forceUpdate()
     },
     hiddenAction(item) {
       // item.show = false
@@ -219,11 +290,26 @@ export default {
     },
     isMobileHeight() {
       return window.innerHeight - 230
+    },
+    inputEnter(e, data) {
+      let value
+      // 遮罩时失效
+      if (!this.messageLoading) {
+        if (e.target.value) value = e.target.value
+        this.messageLoading = true
+        this.addMessage = null // 清空输入框
+        // 取随机用户
+        setMessage(data.id, { body: value, operator: Zoo[Math.floor(Math.random()*Zoo.length)], id: 0 }).then(res => {
+          this.initMessage(data).then(() => {
+            this.messageLoading = false
+          })
+        })
+      }
     }
   }
 }
 </script>
-<style lang="less" scoped>
+<style lang="less">
 .project-list {
   .card-title {
     font-size: 0;
@@ -392,5 +478,75 @@ export default {
 
 .green {
   background: #3ccd44;
+}
+
+.message_board {
+  cursor: pointer;
+  &_clicked {
+    border-style: inset;
+    border-width: 2px;
+  }
+
+  &_content {
+    color: white;
+    width: 160px;
+    height: 275px;
+    &_main {
+      height: 90%;
+      overflow-y: scroll;
+      margin-bottom: 10px;
+      &_head {
+        font-weight: 400;
+        font-size: 8px;
+        text-align: right;
+        margin-right: 0;
+        -webkit-transform: scale(0.8);
+        transform: scale(0.8);
+        margin-right: -15px;
+        opacity: 0.8;
+      }
+
+      &_body {
+        margin-bottom: 22px;
+        padding: 2px;
+        width: 100%;
+        word-break: break-all;
+      }
+
+      &_line {
+        width: 94%;
+        height: 1px;
+        background: linear-gradient(to right, #251e1e, white);
+        margin-bottom: 6px;
+        opacity: 0.5;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      &_nodata {
+        color: #a09292;
+        margin: 0;
+        margin: 0 auto;
+        width: 80%;
+        margin-top: 50%;
+      }
+    }
+    &_input {
+      height: 8%;
+    }
+  }
+
+  .ant-popover-content {
+    color: rgba(255, 255, 255, 0.65);
+    opacity: 0.8;
+    .ant-popover-inner {
+      background-color: #000000;
+      background-clip: padding-box;
+      -webkit-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.15) \9;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.15) \9;
+    }
+  }
 }
 </style>
