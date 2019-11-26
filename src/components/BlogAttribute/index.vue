@@ -46,8 +46,7 @@ export default {
       div.setAttribute('class', 'lucky-circle')
       div.setAttribute('data-left', left)
       div.setAttribute('data-bottom', bottom)
-
-      div.style.bottom = (bottom - 40) + 'px'
+      div.style.bottom = (bottom - (window.outerHeight > 900? (-30): 10)) + 'px'
       div.style.left = left + 'px'
       div.style.color = data.color
       div.style.fontSize = randomWidth + 'px'
