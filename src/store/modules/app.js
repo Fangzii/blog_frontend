@@ -26,7 +26,8 @@ const app = {
     color: null,
     weak: false,
     multiTab: true,
-    multiWindowTag: { Tag: [] }
+    multiWindowTag: { Tag: [] },
+    attribute: null
   },
   mutations: {
     SET_SIDEBAR_TYPE: (state, type) => {
@@ -80,6 +81,9 @@ const app = {
     MULTI_WINDOW_TAG: (state, tag) => {
       Vue.ls.set(MULTI_WINDOW_TAG, tag)
       state.multiWindowTag = tag
+    },
+    SET_ATTRIBUTE: (state, attribute) => {
+      state.attribute = attribute
     }
   },
   actions: {
@@ -124,6 +128,9 @@ const app = {
     },
     multiWindowTag ({ commit }, tag) {
       commit('MULTI_WINDOW_TAG', { Tag: [] })
+    },
+    setAttribute ({ commit }, attribute) {
+      commit('SET_ATTRIBUTE', attribute)
     }
   }
 }

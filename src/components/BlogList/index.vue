@@ -4,7 +4,7 @@
     :loading="false"
     style="margin-bottom: 24px;"
     :bordered="false"
-    title="博客文章"
+    :title="`博客文章`"
     :body-style="{ padding: 0 }"
     ref="card"
   >
@@ -19,7 +19,9 @@
         v-on:magnify="magnify"
       >
         <span slot="title">{{ item[title] }}</span>
+        <!-- more插槽 -->
         <template slot="more">
+          <!-- 留言板 -->
           <a-popover
             trigger="click"
             v-model="item.visible"
@@ -73,6 +75,13 @@
               </a-spin>
             </template>
           </a-popover>
+          <!-- 属性标签 -->
+          <span class="attribute_tags">
+            <blog-icon type="icon-x_biaoqian" :style="`margin-right: 10px;cursor: pointer; ${item.tagsShow? 'transform: rotate(90deg)' : ''};transition: all .3s;`" @click="item.tagsShow = !item.tagsShow"/>
+            <span class="attribute_tags_body" v-if="item.tagsShow">
+              <a-tag :color="tags.color" v-for="(tags, index) in item.attribute" :key="index">{{tags.title}}</a-tag>
+            </span>
+          </span>
         </template>
         <div slot="content">
           <div v-if="!loading && item.detailData" class="window-html">
@@ -83,8 +92,8 @@
           </div>
         </div>
       </blog-window>
-      <a-card-grid class="project-card-grid">
-        <a-card :bordered="false" :body-style="{ padding: 0 }" @click="goDetail(item)">
+      <a-card-grid :class="`project-card-grid ${isAttribute(item)? 'highlight': ''}`">
+        <a-card :bordered="false" :body-style="{ padding: 0 }" @click="goDetail(item)" :class="`${isAttribute(item)? 'highlight_inside': ''}`">
           <a-card-meta>
             <div slot="title" class="card-title">
               <a>{{ item[title] }}</a>
@@ -92,6 +101,7 @@
             <div slot="description" class="card-description">{{ item[synopsis] }}</div>
           </a-card-meta>
           <div class="project-item">
+            <span v-if="isAttribute(item)" class="tags"><a-tag color="#2b3647">{{attribute}}</a-tag></span>
             <a></a>
             <span class="datetime">{{item[time]}}</span>
           </div>
@@ -121,7 +131,8 @@ export default {
     'blog-icon': MyIcon
   },
   computed: mapGetters({
-    multiWindowTag: 'multiWindowTag'
+    multiWindowTag: 'multiWindowTag',
+    attribute: 'attribute'
   }),
   mixins: [mixinDevice],
   watch: {
@@ -144,7 +155,7 @@ export default {
         }
       },
       deep: true
-    }
+    },
   },
   props: {
     data: {
@@ -305,6 +316,9 @@ export default {
           })
         })
       }
+    },
+    isAttribute(data) {
+      return data.attribute.findIndex(f => f.title === this.attribute) > -1
     }
   }
 }
@@ -340,7 +354,7 @@ export default {
     margin-top: 8px;
     overflow: hidden;
     font-size: 12px;
-    height: 20px;
+    height: 22px;
     line-height: 20px;
     a {
       color: rgba(0, 0, 0, 0.45);
@@ -355,6 +369,10 @@ export default {
       color: rgba(0, 0, 0, 0.25);
       flex: 0 0 auto;
       float: right;
+    }
+    .tags {
+      flex: 0 0 auto;
+      float: left;
     }
   }
   .ant-card-meta-description {
@@ -419,6 +437,15 @@ export default {
     display: none;
   }
 }
+
+.highlight {
+  background: #d5dbe2;
+  -webkit-box-shadow: 0 0 5px rgba(0,113,241,1);
+  &_inside {
+    background: #d5dbe2;
+  }
+}
+
 .window {
   border: 1px solid #e8e8e8;
   background: #1f1f1f;
@@ -547,6 +574,14 @@ export default {
       -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.15) \9;
       box-shadow: 0 0 8px rgba(0, 0, 0, 0.15) \9;
     }
+  }
+}
+
+.attribute_tags {
+  margin-left: 15px;
+  &_body {
+    position: relative;
+    bottom: 2px;
   }
 }
 </style>

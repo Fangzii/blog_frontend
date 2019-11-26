@@ -73,4 +73,11 @@ export default {
   display: none;
 } */
 
+.lucky-circle {
+  /* width: 60px;
+  height: 60px; */
+  position: relative;
+  bottom: 0;
+}
+
 </style>

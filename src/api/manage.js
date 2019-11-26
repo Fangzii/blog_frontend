@@ -8,7 +8,8 @@ const api = {
   permission: '/permission',
   permissionNoPager: '/permission/no-pager',
   orgTree: '/org/tree',
-  messageBoard: '/v1/messageboard'
+  messageBoard: '/v1/messageboard',
+  attribute: '/v1/attribute_rankings/'
 }
 
 export default api
@@ -92,5 +93,13 @@ export function setMessage (id, parameter) {
     url: api.entries + id + '/set_message/',
     method: parameter.id === 0 ? 'post' : 'put',
     data: parameter
+  })
+}
+
+export function getAttribute (parameter) {
+  return axios({
+    url: api.attribute,
+    method: 'get',
+    params: parameter
   })
 }
