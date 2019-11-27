@@ -7,8 +7,6 @@ Fork于
 </div>
 
 
-- 首页:  [Fang's Blog](http://fangzicheng.cn)
-
 
 环境和依赖
 ----
@@ -71,3 +69,7 @@ yarn run lint
 - 接入第三方登入
 - 搜索功能拓展
 - 菜单栏改版
+
+demo
+----
+- 首页:  [Fang's Blog](http://fangzicheng.cn)
