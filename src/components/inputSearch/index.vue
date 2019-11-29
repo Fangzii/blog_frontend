@@ -78,7 +78,7 @@ export default {
 
 .ant-input::-webkit-input-placeholder {
   color: #3a3b3f !important;
-  font-size: 8px !important;
+  font-size: 8rpx !important;
 }
 </style>
 

@@ -75,7 +75,7 @@ export default {
   color: #2f2f2f;
   border-radius: 5px;
   margin-left: 5px;
-  font-size: 8px;
+  font-size: 12rpx;
   // transition: all 1s;
   &-title {
     max-width: 200px;
