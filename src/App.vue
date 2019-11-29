@@ -80,4 +80,15 @@ export default {
   bottom: 0;
 }
 
+pre {
+  filter: invert(100%);
+  padding: 14px;
+  background: #e1f3f1;
+  color:#333;
+  margin-top: 0;
+  margin-bottom: 1em;
+  overflow: auto;
+  border-radius: 3px;
+}
+
 </style>
