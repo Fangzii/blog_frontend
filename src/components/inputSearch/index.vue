@@ -46,6 +46,7 @@ export default {
       console.log(value, 999)
     },
     change(value) {
+      // this.data = value.data;
       this.visible = this.data ? true : false
     },
     clickInput() {
