@@ -23,7 +23,6 @@ export default {
 <style>
 #app {
   height: 100%;
-  font-family: Menlo,Monaco,Consolas,Chinese Quote,-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol!important;
 }
 ::-webkit-scrollbar {display:none};
 .fang-handle-class {
