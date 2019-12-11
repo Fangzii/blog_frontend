@@ -86,6 +86,7 @@ module.exports = {
     loaderOptions: {
       less: {
         modifyVars: {
+          'font-family': ['Monaco', 'Consolas', "Chinese Quote", '-apple-system', 'BlinkMacSystemFont', "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", 'Helvetica', 'Arial', 'sans-serif', "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"]
           /* less 变量覆盖，用于自定义 ant design 主题 */
 
           /*
@@ -116,5 +117,5 @@ module.exports = {
   productionSourceMap: false,
   lintOnSave: undefined,
   // babel-loader no-ignore node_modules/*
-  transpileDependencies: [ 'vue-clamp', 'resize-detector' ]
+  transpileDependencies: ['vue-clamp', 'resize-detector']
 }
