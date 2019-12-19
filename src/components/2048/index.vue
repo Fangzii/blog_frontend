@@ -1,5 +1,5 @@
 <template>
-  <div :class="open? `bottom` : `bottom_mask`" :style="(big? 'transform: scale(0.6);right: -94px;bottom: -108px;': '') + (hidden? (big? 'bottom: -398px;':'bottom: -333px;'): '')">
+  <div :class="`bottom`" :style="(big? 'transform: scale(0.6);right: -94px;bottom: -108px;': '') + (hidden? (big? 'bottom: -398px;':'bottom: -333px;'): '')">
     <img
       src="./icon/start.png"
       width="150px"
