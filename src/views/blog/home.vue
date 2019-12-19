@@ -1,16 +1,20 @@
 
 <template>
-  <page-view :avatar="avatar" :title="false">
-    <div slot="headerContent">
-      <div class="title">
-        <!-- {{ timeFix }}，{{ user.name }}
-        <span class="welcome-text">，{{ welcome() }}</span>-->
+  <div>
+    <page-view :avatar="avatar" :title="false">
+      <div slot="headerContent">
+        <div class="title">
+          <!-- {{ timeFix }}，{{ user.name }}
+          <span class="welcome-text">，{{ welcome() }}</span>-->
+        </div>
       </div>
-    </div>
-    <div>
-      <blogList :data="blogListData" :h="h" :w="w" ref="all"></blogList>
-    </div>
-  </page-view>
+      <div>
+        <blogList :data="blogListData" :h="h" :w="w" ref="all"></blogList>
+      </div>
+    </page-view>
+    <game></game>
+  </div>
+
 </template>
 
 <script>
@@ -20,6 +24,7 @@ import { mapGetters } from 'vuex'
 import { PageView } from '@/layouts'
 import HeadInfo from '@/components/tools/HeadInfo'
 import blogList from '@/components/BlogList/index'
+import game from '@/components/2048/index'
 import moment from 'moment'
 import { getUserList, getServiceList, getUserInformatization, getBlogDetail } from '@/api/manage'
 const DataSet = require('@antv/data-set')
@@ -29,7 +34,8 @@ export default {
   components: {
     blogList,
     PageView,
-    HeadInfo
+    HeadInfo,
+    game
   },
   data() {
     return {

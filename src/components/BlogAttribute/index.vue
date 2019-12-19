@@ -81,13 +81,14 @@ export default {
   }
 }
 </script>
-<style lang="less" scoped>
+<style lang="less">
 .blogAttribute {
   user-select: none;
   display: flex;
 }
 
 .attribute {
+  z-index: 555;
   width: 600px;
   margin: 0 auto;
   // height: 100%;
@@ -161,6 +162,13 @@ export default {
   to {
     transform: translate(0, 15px);
   }
+}
+
+.lucky-circle {
+  /* width: 60px;
+  height: 60px; */
+  position: relative;
+  bottom: 0;
 }
 
 // close #4f6880
