@@ -1,8 +1,10 @@
 const path = require('path')
 const webpack = require('webpack')
 const TerserPlugin = require('terser-webpack-plugin')
+const oss = require('./oss.config')
+const WebpackAliyunOss = require('webpack-aliyun-oss')
 
-function resolve (dir) {
+function resolve(dir) {
   return path.join(__dirname, dir)
 }
 
@@ -10,6 +12,8 @@ const baseAPI = 'http://3.114.86.155/api/'
 
 // vue.config.js
 module.exports = {
+  outputDir: 'dist',
+  publicPath: oss.buildPath, // 文件加载设置为相对路径
   /*
     Vue-cli3:
     Crashed when using Webpack `import()` #2463
@@ -27,7 +31,33 @@ module.exports = {
   configureWebpack: {
     plugins: [
       // Ignore all locale files of moment.js
-      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
+      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+      new WebpackAliyunOss({
+        from: ['./dist/**'], // 上传那个文件或文件夹  可以是字符串或数组
+        dist: '/blogview', // 需要上传到oss上的给定文件目录
+        region: oss.region,
+        accessKeyId: oss.accessKeyId,
+        accessKeySecret: oss.accessKeySecret,
+        bucket: oss.bucket,
+
+        // test: true,
+        // 上面一行，可以在进行测试看上传路径是否正确, 打开后只会显示上传路径并不会真正上传;
+
+        // 因为文件标识符 "\"  和 "/" 的区别 不进行 setOssPath配置,上传的文件夹就会拼到文件名上, 丢失了文件目录,所以需要对setOssPath 配置。
+        setOssPath: filePath => {
+          // some operations to filePath
+          const index = filePath.lastIndexOf('dist')
+          const Path = filePath.substring(index + 4, filePath.length)
+          return Path.replace(/\\/g, '/')
+        },
+        setHeaders: filePath => {
+          // some operations to filePath
+          // return false to use default header
+          return {
+            'Cache-Control': 'max-age=31536000'
+          }
+        }
+      })
     ],
     optimization: {
       minimizer: [
@@ -42,7 +72,7 @@ module.exports = {
     }
   },
 
-  chainWebpack: (config) => {
+  chainWebpack: config => {
     config.resolve.alias
       .set('@$', resolve('src'))
       .set('@api', resolve('src/api'))
@@ -86,7 +116,24 @@ module.exports = {
     loaderOptions: {
       less: {
         modifyVars: {
-          'font-family': ['Monaco', 'Consolas', "Chinese Quote", '-apple-system', 'BlinkMacSystemFont', "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", 'Helvetica', 'Arial', 'sans-serif', "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"]
+          'font-family': [
+            'Monaco',
+            'Consolas',
+            'Chinese Quote',
+            '-apple-system',
+            'BlinkMacSystemFont',
+            'Segoe UI',
+            'PingFang SC',
+            'Hiragino Sans GB',
+            'Microsoft YaHei',
+            'Helvetica Neue',
+            'Helvetica',
+            'Arial',
+            'sans-serif',
+            'Apple Color Emoji',
+            'Segoe UI Emoji',
+            'Segoe UI Symbol'
+          ]
           /* less 变量覆盖，用于自定义 ant design 主题 */
 
           /*

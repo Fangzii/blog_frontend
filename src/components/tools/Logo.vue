@@ -32,9 +32,9 @@
             <span v-if="!(item.type === 'wechat')">{{item.show}}</span>
             <!-- 微信二维码浮窗 -->
             <a-popover placement="rightBottom" v-if="item.type === 'wechat'">
-              <template slot="content">
+              <!-- <template slot="content">
                 <img src="../../../static/image/qrcode.jpeg" style="width: 130px">
-              </template>
+              </template> -->
               <span>{{item.show}}</span>
             </a-popover>
           </div>
