@@ -9,55 +9,43 @@ function resolve(dir) {
 }
 
 const baseAPI = 'http://3.114.86.155/api/'
+const ossOption = new WebpackAliyunOss({
+  from: ['./dist/**'], // 上传那个文件或文件夹  可以是字符串或数组
+  dist: '/blogview', // 需要上传到oss上的给定文件目录
+  region: oss.region,
+  accessKeyId: oss.accessKeyId,
+  accessKeySecret: oss.accessKeySecret,
+  bucket: oss.bucket,
 
+  // test: true,
+  // 上面一行，可以在进行测试看上传路径是否正确, 打开后只会显示上传路径并不会真正上传;
+
+  // 因为文件标识符 "\"  和 "/" 的区别 不进行 setOssPath配置,上传的文件夹就会拼到文件名上, 丢失了文件目录,所以需要对setOssPath 配置。
+  setOssPath: filePath => {
+    // some operations to filePath
+    const index = filePath.lastIndexOf('dist')
+    const Path = filePath.substring(index + 4, filePath.length)
+    return Path.replace(/\\/g, '/')
+  },
+  setHeaders: filePath => {
+    // some operations to filePath
+    // return false to use default header
+    return {
+      'Cache-Control': 'max-age=31536000'
+    }
+  }
+})
+
+const isServe = process.env.NODE_ENV === 'development'
 // vue.config.js
 module.exports = {
   outputDir: 'dist',
-  publicPath: oss.buildPath, // 文件加载设置为相对路径
-  /*
-    Vue-cli3:
-    Crashed when using Webpack `import()` #2463
-    https://github.com/vuejs/vue-cli/issues/2463
-
-   */
-  /*
-  pages: {
-    index: {
-      entry: 'src/main.js',
-      chunks: ['chunk-vendors', 'chunk-common', 'index']
-    }
-  },
-  */
+  publicPath: isServe ? '/' : oss.buildPath, // 文件加载设置为相对路径
   configureWebpack: {
     plugins: [
       // Ignore all locale files of moment.js
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-      new WebpackAliyunOss({
-        from: ['./dist/**'], // 上传那个文件或文件夹  可以是字符串或数组
-        dist: '/blogview', // 需要上传到oss上的给定文件目录
-        region: oss.region,
-        accessKeyId: oss.accessKeyId,
-        accessKeySecret: oss.accessKeySecret,
-        bucket: oss.bucket,
-
-        // test: true,
-        // 上面一行，可以在进行测试看上传路径是否正确, 打开后只会显示上传路径并不会真正上传;
-
-        // 因为文件标识符 "\"  和 "/" 的区别 不进行 setOssPath配置,上传的文件夹就会拼到文件名上, 丢失了文件目录,所以需要对setOssPath 配置。
-        setOssPath: filePath => {
-          // some operations to filePath
-          const index = filePath.lastIndexOf('dist')
-          const Path = filePath.substring(index + 4, filePath.length)
-          return Path.replace(/\\/g, '/')
-        },
-        setHeaders: filePath => {
-          // some operations to filePath
-          // return false to use default header
-          return {
-            'Cache-Control': 'max-age=31536000'
-          }
-        }
-      })
+      ...(isServe ? [] : [ossOption])
     ],
     optimization: {
       minimizer: [
@@ -97,19 +85,6 @@ module.exports = {
       .options({
         name: 'assets/[name].[hash:8].[ext]'
       })
-    /* svgRule.oneOf('inline')
-      .resourceQuery(/inline/)
-      .use('vue-svg-loader')
-      .loader('vue-svg-loader')
-      .end()
-      .end()
-      .oneOf('external')
-      .use('file-loader')
-      .loader('file-loader')
-      .options({
-        name: 'assets/[name].[hash:8].[ext]'
-      })
-    */
   },
 
   css: {
@@ -148,6 +123,7 @@ module.exports = {
   },
 
   devServer: {
+    publicPath: '/',
     proxy: {
       '/api': {
         target: baseAPI, // 开发环境地址

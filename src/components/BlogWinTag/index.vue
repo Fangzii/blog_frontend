@@ -15,7 +15,7 @@
             <h4 class="winTag-title">{{item.title}}</h4>
           </a-col>
           <a-col :span="2">
-            <blog-icon type="icon-close" class="winTag-close" @click="item.close(item)"></blog-icon>
+            <blog-icon type="icon-close" class="win-tag-close" @click="item.close(item)"></blog-icon>
           </a-col>
         </a-row>
       </div>
@@ -68,7 +68,7 @@ export default {
   display: flex;
 }
 
-.winTag {
+.win-tag {
   background: #d1d1d1;
   opacity: 1;
   padding: 6px 15px 0px 10px;

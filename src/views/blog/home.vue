@@ -2,15 +2,7 @@
 <template>
   <div>
     <page-view :avatar="avatar" :title="false">
-      <div slot="headerContent">
-        <div class="title">
-          <!-- {{ timeFix }}，{{ user.name }}
-          <span class="welcome-text">，{{ welcome() }}</span>-->
-        </div>
-      </div>
-      <div>
-        <blogList :data="blogListData" :h="h" :w="w" ref="all"></blogList>
-      </div>
+      <blogList :data="blogListData" :h="h" :w="w" ref="all"></blogList>
     </page-view>
     <game></game>
   </div>

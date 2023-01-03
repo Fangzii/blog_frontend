@@ -36,17 +36,20 @@ export default {
       })
     },
     changeDiv(r_w, data, index) {
-      let randomWidth = data['num'] * r_w + 1
+      let randomWidth = data['num'] + r_w + 1
       let container = this.$refs.attribute
       let allEle = container.getElementsByTagName('*')
       let div = this.$refs[`attribute_id_${index}`][0]
       let bottom = parseInt(Math.random() * ((container.clientHeight - randomWidth)))
-      let left = parseInt(Math.random() * ((container.clientWidth - randomWidth)))
+      let left = parseInt(Math.random() * ((container.clientWidth - randomWidth + 50)))
 
       div.setAttribute('class', 'lucky-circle')
       div.setAttribute('data-left', left)
+      // bottom += 200 
       div.setAttribute('data-bottom', bottom)
+      console.log(bottom)
       div.style.bottom = (bottom - (window.outerHeight > 900? (-30): 10)) + 'px'
+      console.log(div.style.bottom)
       div.style.left = left + 'px'
       div.style.color = data.color
       div.style.fontSize = randomWidth + 'px'
@@ -88,8 +91,8 @@ export default {
 }
 
 .attribute {
-  z-index: 555;
-  width: 600px;
+  z-index: 1000;
+  width: 100%;
   margin: 0 auto;
   // height: 100%;
 }

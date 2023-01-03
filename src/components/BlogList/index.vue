@@ -1,114 +1,117 @@
 <template>
-  <a-card
-    class="project-list"
-    :loading="false"
-    style="margin-bottom: 24px;"
-    :bordered="false"
-    :title="`博客文章`"
-    :body-style="{ padding: 0 }"
-    ref="card"
-  >
-    <router-view></router-view>
-    <a slot="extra"></a>
-    <div :key="i" v-for="(item, i) in data">
-      <blog-window
-        v-if="item.show"
-        v-on:close="closeAction(item)"
-        :base_information="{author: item.author.name ,time: item.all_time, view: item.views }"
-        :loading="loading"
-        v-on:magnify="magnify"
-      >
-        <span slot="title">{{ item[title] }}</span>
-        <!-- more插槽 -->
-        <template slot="more">
-          <!-- 留言板 -->
-          <a-popover
-            trigger="click"
-            v-model="item.visible"
-            placement="bottomLeft"
-            overlayClassName="message_board"
-            :autoAdjustOverflow="false"
-            :getPopupContainer="
-              triggerNode => {
-                return triggerNode.parentNode;
-              }
-            "
-          >
-            <span :class="`message_board ${item.visible? 'message_board_clicked': ''}`">
-              <blog-icon type="icon-x_liuyan"/>
-            </span>
-            <template slot="content">
-              <a-spin :spinning="messageLoading">
-                <blog-icon
-                  slot="indicator"
-                  type="icon-x_gengxin"
-                  style="transform: rotateY(180deg);"
-                  spin
-                />
-                <div class="message_board_content">
-                  <div class="message_board_content_main">
-                    <div v-for="(items, index) in item.messageBoardData" :key="index">
-                      <div class="message_board_content_main_body">{{items.body}}</div>
-                      <div class="message_board_content_main_head">
-                        <span>{{items.operator && items.operator.name}}</span>
-                        <div>{{items.time}}</div>
+  <div>
+    <a-card
+      class="project-list"
+      :loading="false"
+      style="margin-bottom: 24px;"
+      :bordered="false"
+      :body-style="{ padding: 0 }"
+      ref="card"
+    >
+      <div slot="title" style="text-align:center">Fangzii Blog</div>
+      <router-view></router-view>
+      <a slot="extra"></a>
+      <div :key="i" v-for="(item, i) in data">
+        <blog-window
+          v-if="item.show"
+          v-on:close="closeAction(item)"
+          :base_information="{author: item.author.name ,time: item.all_time, view: item.views }"
+          :loading="loading"
+          v-on:magnify="magnify"
+        >
+          <span slot="title" style="cursor: move;">{{ item[title] }}</span>
+          <!-- more插槽 -->
+          <template slot="more">
+            <!-- 留言板 -->
+            <a-popover
+              trigger="click"
+              v-model="item.visible"
+              placement="bottomLeft"
+              overlayClassName="message_board"
+              :autoAdjustOverflow="false"
+              :getPopupContainer="
+                triggerNode => {
+                  return triggerNode.parentNode;
+                }
+              "
+            >
+              <span :class="`message_board ${item.visible? 'message_board_clicked': ''}`">
+                <blog-icon type="icon-x_liuyan"/>
+              </span>
+              <template slot="content">
+                <a-spin :spinning="messageLoading">
+                  <blog-icon
+                    slot="indicator"
+                    type="icon-x_gengxin"
+                    style="transform: rotateY(180deg);"
+                    spin
+                  />
+                  <div class="message_board_content">
+                    <div class="message_board_content_main">
+                      <div v-for="(items, index) in item.messageBoardData" :key="index">
+                        <div class="message_board_content_main_body">{{items.body}}</div>
+                        <div class="message_board_content_main_head">
+                          <span>{{items.operator && items.operator.name}}</span>
+                          <div>{{items.time}}</div>
+                        </div>
+                        <div class="message_board_content_main_line"></div>
                       </div>
-                      <div class="message_board_content_main_line"></div>
+                      <div
+                        v-if="item.messageBoardData.length === 0"
+                        class="message_board_content_main_nodata"
+                      >
+                        <blog-icon type="icon-x_penzai"/>添加一条评论吧~
+                      </div>
                     </div>
-                    <div
-                      v-if="item.messageBoardData.length === 0"
-                      class="message_board_content_main_nodata"
-                    >
-                      <blog-icon type="icon-x_penzai"/>添加一条评论吧~
+                    <div class="message_board_content_input">
+                      <a-input
+                        :disabled="messageLoading"
+                        size="small"
+                        v-model="addMessage"
+                        @pressEnter="inputEnter($event,item)"
+                        style="background: #4a754de0;border: 0px solid #000000;color: white"
+                      />
                     </div>
                   </div>
-                  <div class="message_board_content_input">
-                    <a-input
-                      :disabled="messageLoading"
-                      size="small"
-                      v-model="addMessage"
-                      @pressEnter="inputEnter($event,item)"
-                      style="background: #4a754de0;border: 0px solid #000000;color: white"
-                    />
-                  </div>
-                </div>
-              </a-spin>
-            </template>
-          </a-popover>
-          <!-- 属性标签 -->
-          <span class="attribute_tags">
-            <blog-icon type="icon-x_biaoqian" :style="`margin-right: 10px;cursor: pointer; ${item.tagsShow? 'transform: rotate(90deg)' : ''};transition: all .3s;`" @click="item.tagsShow = !item.tagsShow"/>
-            <span class="attribute_tags_body" v-if="item.tagsShow">
-              <a-tag :color="tags.color" v-for="(tags, index) in item.attribute" :key="index">{{tags.title}}</a-tag>
+                </a-spin>
+              </template>
+            </a-popover>
+            <!-- 属性标签 -->
+            <span class="attribute_tags">
+              <blog-icon type="icon-x_biaoqian" :style="`margin-right: 10px;cursor: pointer; ${item.tagsShow? 'transform: rotate(90deg)' : ''};transition: all .3s;`" @click="item.tagsShow = !item.tagsShow"/>
+              <span class="attribute_tags_body" v-if="item.tagsShow">
+                <a-tag :color="tags.color" v-for="(tags, index) in item.attribute" :key="index">{{tags.title}}</a-tag>
+              </span>
             </span>
-          </span>
-        </template>
-        <div slot="content">
-          <div v-if="!loading && item.detailData" class="window-html">
-            <div
-              v-html="item.detailData.body"
-              :style="`height: ${isMobile()? isMobileHeight():(showHeight - 20 + addHeight)}px;overflow :auto;filter: invert(100%);`"
-            ></div>
-          </div>
-        </div>
-      </blog-window>
-      <a-card-grid :class="`project-card-grid ${isAttribute(item)? 'highlight': ''}`">
-        <a-card :bordered="false" :body-style="{ padding: 0 }" @click="goDetail(item)" :class="`${isAttribute(item)? 'highlight_inside': ''}`">
-          <a-card-meta>
-            <div slot="title" class="card-title">
-              <a>{{ item[title] }}</a>
+          </template>
+          <div slot="content">
+            <div v-if="!loading && item.detailData" class="window-html">
+              <div
+                v-html="item.detailData.body"
+                :style="`height: ${isMobile()? isMobileHeight():(showHeight - 20 + addHeight)}px;overflow :auto;filter: invert(100%);`"
+              ></div>
             </div>
-            <div slot="description" class="card-description">{{ item[synopsis] }}</div>
-          </a-card-meta>
-          <div class="project-item">
-            <span v-if="isAttribute(item)" class="tags"><a-tag color="#2b3647">{{attribute}}</a-tag></span>
-            <a></a>
-            <span class="datetime">{{item[time]}}</span>
           </div>
-        </a-card>
-      </a-card-grid>
-    </div>
-  </a-card>
+        </blog-window>
+        <a-card-grid :class="`project-card-grid ${isAttribute(item)? 'highlight': ''}`">
+          <a-card :bordered="false" :body-style="{ padding: 0 }" @click="goDetail(item)" :class="`${isAttribute(item)? 'highlight_inside': ''}`">
+            <a-card-meta>
+              <div slot="title" class="card-title">
+                <a>{{ item[title] }}</a>
+              </div>
+              <div slot="description" class="card-description">{{ item[synopsis] }}</div>
+            </a-card-meta>
+            <div class="project-item">
+              <span v-if="isAttribute(item)" class="tags"><a-tag color="#2b3647">{{attribute}}</a-tag></span>
+              <a></a>
+              <span class="datetime">{{item[time]}}</span>
+            </div>
+          </a-card>
+        </a-card-grid>
+      </div>
+    </a-card>
+    <div style="box-shadow: 0em 0.5px 1em 0.1em #40a9ff;width: 100%;height: 2px;top: -24px;position: relative;background: #40a9ff5e;"></div>
+  </div>
 </template>
 
 <script>
@@ -342,6 +345,7 @@ export default {
       }
     }
   }
+  // .card-
   .card-description {
     color: rgba(0, 0, 0, 0.45);
     margin-left: 16px;
@@ -380,6 +384,9 @@ export default {
     height: 44px;
     line-height: 22px;
     overflow: hidden;
+  }
+  .ant-card-body {
+    max-height: 68vh; overflow-y: auto;
   }
 }
 

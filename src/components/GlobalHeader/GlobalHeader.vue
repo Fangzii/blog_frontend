@@ -5,20 +5,19 @@
         v-if="visible"
         :class="[fixedHeader && 'ant-header-fixedHeader', sidebarOpened ? 'ant-header-side-opened' : 'ant-header-side-closed', ]"
         :style="{ padding: '0', background: 'red'}">
-        <div v-if="mode === 'sidemenu'" class="header" style="background: #3a3b3f;">
+        <div v-if="mode === 'sidemenu'" class="header" style="background: rgb(56 66 70);">
           <a-row>
             <a-col :span="1">
               <blog-icon v-if="device==='mobile'" class="trigger" :type="collapsed ? 'icon-x_shouqi' : 'icon-x_zhankai'" @click="toggle" style="color: #3a3b3f;filter: invert(100%);transform: scale(0.7);position: relative;right: 5px;"/>
               <blog-icon v-else class="trigger" :type="collapsed ? 'icon-x_zhankai' : 'icon-x_shouqi'" @click="toggle" style="color: #3a3b3f;filter: invert(100%);transform: scale(0.7);position: relative;right: 5px;"/>
             </a-col>
             <a-col :span="17" style="line-height: 20px;top: 15px;">
-                <blogWinTag />
+              <blogWinTag />
             </a-col>
             <a-col :span="6">
-              <input-search style="float: right"></input-search> 
+              <input-search style="float: right"/> 
             </a-col>
           </a-row>
-          <!-- <user-menu></user-menu> -->
         </div>
         <div v-else :class="['top-nav-header-index', theme]">
           <div class="header-index-wide">
@@ -128,7 +127,7 @@ export default {
 
 <style lang="less">
 .header-animat{
-
+  height: 46px;
   position: relative;
   z-index: 2;
 }

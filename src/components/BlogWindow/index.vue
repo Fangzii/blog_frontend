@@ -33,7 +33,7 @@
                       <div v-show="actionShow" class="window-aciton">
                         <blog-icon
                           :type="`${items.icon}`"
-                          :style="`position: relative;bottom: 2px;right: 0px;transform:${items.icon === 'icon-zhankai'? 'rotate(45deg)': 'scale(0.9)'};`"
+                          :style="`position: relative;bottom: 3px;right: 0px;transform:${items.icon === 'icon-zhankai'? 'rotate(45deg)': 'scale(0.9)'};`"
                           class="win-action"
                         ></blog-icon>
                       </div>

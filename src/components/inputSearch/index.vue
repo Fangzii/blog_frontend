@@ -4,7 +4,6 @@
       placement="bottomLeft"
       trigger="click"
       :visible="visible"
-      style="top: 10px"
     >
     <div slot="title">
       <!-- 提词器 -->
@@ -13,7 +12,7 @@
       <div slot="content">
         <baseSearch :inString="data" :visible="visible" v-on:afterClick="afterClick"></baseSearch>
       </div>
-      <a-input-search v-model="data" @change="change" @click="clickInput" @blur="blurInput" placeholder="请输入搜索..."/>
+      <a-input-search v-model="data" @change="change" @click="clickInput" @blur="blurInput"/>
     </a-popover>
   </div>
 </template>
